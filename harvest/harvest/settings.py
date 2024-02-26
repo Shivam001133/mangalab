@@ -1,3 +1,6 @@
+import os
+import django
+
 # Scrapy settings for harvest project
 #
 # For simplicity, this file contains only settings considered important or
@@ -91,3 +94,6 @@ ROBOTSTXT_OBEY = True
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mangalab.settings'
+django.setup()

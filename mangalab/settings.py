@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from unittest.mock import DEFAULT
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,8 +30,17 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+CUSTOM_APPS = [
+    'manga.apps.MangaConfig',
+    'analytics.apps.AnalyticsConfig',
+    'anime.apps.AnimeConfig',
+    'mangalab_web.apps.MangalabWebConfig',
+    'users.apps.UsersConfig',
+]
 
-INSTALLED_APPS = [
+THREAD_PARTY_APPS = []
+
+DEFAULT_APP = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+INSTALLED_APPS = DEFAULT_APP + CUSTOM_APPS + THREAD_PARTY_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

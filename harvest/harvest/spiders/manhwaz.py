@@ -1,5 +1,5 @@
 import scrapy
-from helpers import get_chaper_no
+from helpers import save_manga
 
 class ManhwazSpider(scrapy.Spider):
     name = "manhwaz"
@@ -11,17 +11,17 @@ class ManhwazSpider(scrapy.Spider):
         for item in items:
             image_data  = response.css('.img-item')
             image_url = image_data.css('a img::attr(src)').get()
-            latest_url = image_data.css('.btn-link::attr(href)').get()
-            latest_chapter = image_data.css('.btn-link::text').get()
-            manga_name = item.css('.line-2 a::text').get()
+            chapter_url = image_data.css('.btn-link::attr(href)').get()
+            chapter_name = image_data.css('.btn-link::text').get()
+            title = item.css('.line-2 a::text').get()
             manga_url = item.css('.line-2 a::attr(href)').get()
-            # title = item.css('a::text').get()
-            # url = item.css('a::attr(href)').get()
             
-            yield {
-                '': '******************************',
-                'image': image_url,
-                'url': latest_url,
-                'lt': latest_chapter,
-                'manga_name': manga_name,
-            }
+            if title and manga_url:
+                data = {
+                    'title': title,
+                    'manga_url': manga_url,
+                    'image_url': image_url,
+                    'chapter_url': chapter_url,
+                    'chapter': chapter_name
+                }
+            save_manga(data)

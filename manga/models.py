@@ -1,19 +1,24 @@
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
+from ckeditor.fields import RichTextField
 
 
-class MnagaType(models.CharField):
+class MnagaType(models.TextChoices):
     MANHWA = 'manhwa', _('Manhwa')
     MANGA = 'manga', _('Manga')
     MANHUA = 'manhua', _('Manhua')
     COMIC = 'comic', _('Comic')
+    OTHER = 'other', _('Other')
 
 
 class Manga(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, unique=True)
+    manga_type = models.CharField(
+        choices=MnagaType.choices, default=MnagaType.OTHER,
+        max_length=30)
+    description = RichTextField()
 
-    manga_type = models.CharField(choise=MnagaType, default=MnagaType.MANGA)
-
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -21,7 +26,7 @@ class Manga(models.Model):
         return self.title
 
 
-class MangaSource(models.CharField):
+class MangaSource(models.TextChoices):
     MANHWAZ = 'manhwaz', _('Manhwaz')
     OTHER = 'other', _('Other')
 
@@ -29,11 +34,12 @@ class MangaSource(models.CharField):
 class TitleImage(models.Model):
     manga = models.ForeignKey(Manga, on_delete=models.CASCADE,
                               related_name='mangaimage')
-    image = models.URLField()
+    image = models.URLField(unique=True)
     image_source = models.CharField(
-        max_length=50, choise=MangaSource, 
+        max_length=50, choices=MangaSource.choices, 
         default=MangaSource.OTHER)
     
+    is_active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -47,8 +53,11 @@ class Chapter(models.Model):
     latest = models.BooleanField(default=False)
     treanding = models.BooleanField(default=False)
     chapter_source = models.CharField(
-        choise=MangaSource, null=True, blank=True)
+        choices=MangaSource.choices, default=MangaSource.OTHER,
+        max_length=50)
+    chapter_url = models.URLField(unique=True)
 
+    is_live = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

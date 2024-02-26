@@ -4,6 +4,13 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
+from scrapy_djangoitem import DjangoItem
+from manga.models import (Manga, TitleImage, Chapter,
+                          MangaSource)
+
+
+class Mandga(DjangoItem):
+    django_model = Manga
 
 
 class HarvestItem(scrapy.Item):
