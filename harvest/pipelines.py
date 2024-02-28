@@ -10,4 +10,5 @@ from itemadapter import ItemAdapter
 
 class HarvestPipeline:
     def process_item(self, item, spider):
+        item.save()
         return item

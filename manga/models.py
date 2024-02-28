@@ -10,9 +10,17 @@ class MnagaType(models.TextChoices):
     COMIC = 'comic', _('Comic')
     OTHER = 'other', _('Other')
 
+    # @property
+    # def to_dict(self):
+    #     data = {
+    #         'data': json.loads(self.data),
+    #         'date': self.date
+    #     }
+    #     return data
 
 class Manga(models.Model):
     title = models.CharField(max_length=100, unique=True)
+    manga_url = models.URLField(unique=True)
     manga_type = models.CharField(
         choices=MnagaType.choices, default=MnagaType.OTHER,
         max_length=30)
@@ -50,6 +58,7 @@ class TitleImage(models.Model):
 class Chapter(models.Model):
     manga = models.ForeignKey(Manga, on_delete=models.CASCADE,
                               related_name='mangachapter')
+    chapter_no = models.IntegerField(default=0, null=True, blank=True)
     latest = models.BooleanField(default=False)
     treanding = models.BooleanField(default=False)
     chapter_source = models.CharField(

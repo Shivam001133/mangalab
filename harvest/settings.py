@@ -1,5 +1,16 @@
 import os
+import sys
 import django
+
+
+# DJANGO INTEGRATION
+
+sys.path.append(os.path.dirname(os.path.abspath('.')))
+# Do not forget the change iCrawler part based on your project name
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mangalab.settings'
+
+# This is required only if Django Version > 1.8
+django.setup()
 
 # Scrapy settings for harvest project
 #
@@ -65,9 +76,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    "harvest.pipelines.HarvestPipeline": 300,
-#}
+ITEM_PIPELINES = {
+    "harvest.pipelines.HarvestPipeline": 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -95,5 +106,3 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'mangalab.settings'
-django.setup()

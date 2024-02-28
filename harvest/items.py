@@ -5,13 +5,16 @@
 
 import scrapy
 from scrapy_djangoitem import DjangoItem
-from manga.models import (Manga, TitleImage, Chapter,
-                          MangaSource)
+from manga.models import Manga, Chapter, TitleImage
 
-
-class Mandga(DjangoItem):
+class MangaItem(DjangoItem):
     django_model = Manga
 
+class TitleImageItem(DjangoItem):
+    django_model = TitleImage
+
+class ChapterItem(DjangoItem):
+    django_model = Chapter
 
 class HarvestItem(scrapy.Item):
     # define the fields for your item here like:
