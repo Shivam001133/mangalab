@@ -17,7 +17,7 @@ class MangaList(models.Model):
     manga_type = models.CharField(
         choices=MnagaType.choices, default=MnagaType.OTHER,
         max_length=30)
-    description = RichTextField()
+    description = RichTextField(blank=False, null=False)
 
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -34,7 +34,8 @@ class MangaSource(models.TextChoices):
 
 class TitleImage(models.Model):
     manga = models.ForeignKey(MangaList, on_delete=models.CASCADE,
-                              related_name='mangaimage')
+                              related_name='mangaimage',
+                              null=True, blank=True)
     image = models.URLField(unique=True)
     image_source = models.CharField(
         max_length=50, choices=MangaSource.choices, 
@@ -44,8 +45,8 @@ class TitleImage(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self) -> str:
-        return self.manga.title
+    # def __str__(self) -> str:
+    #     return self.manga.title
 
 
 class ChapterList(models.Model):
@@ -63,6 +64,6 @@ class ChapterList(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self) -> str:
-        return self.manga.title
+    # def __str__(self) -> str:
+    #     return self.manga.title
     

@@ -11,11 +11,13 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 from mangalab.settings.get_env import DEBUG, SECRET_KEY
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -39,7 +41,8 @@ CUSTOM_APPS = [
     'anime.apps.AnimeConfig',
     'mangalab_web.apps.MangalabWebConfig',
     'users.apps.UsersConfig',
-    # 'harvest',
+    'scraper',
+    'ckeditor',
 ]
 
 THREAD_PARTY_APPS = []

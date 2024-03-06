@@ -9,12 +9,13 @@
 
 BOT_NAME = "scraper"
 
-SPIDER_MODULES = ["scraper.spiders"]
-NEWSPIDER_MODULE = "scraper.spiders"
+SPIDER_MODULES = ["scraper.scraper.spiders"]
+NEWSPIDER_MODULE = "scraper.scraper.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "scraper (+http://www.yourdomain.com)"
+USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -63,7 +64,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   "scraper.pipelines.ScrapyItemPipeline": 300,
+   "scraper.scraper.pipelines.ScrapyItemPipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

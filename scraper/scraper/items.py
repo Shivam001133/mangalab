@@ -3,10 +3,9 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 
-import scrapy
+# import scrapy
 from scrapy_djangoitem import DjangoItem
-from manga.models import MangaList
+from manga.models import TitleImage 
 
-    
-class ScrapyItem(DjangoItem):
-    django_model = MangaList
+class ImageItem(DjangoItem):
+    django_model = TitleImage
