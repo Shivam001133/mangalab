@@ -1,18 +1,4 @@
-import os
-import sys
-import django
-
-
-# DJANGO INTEGRATION
-
-sys.path.append(os.path.dirname(os.path.abspath('.')))
-# Do not forget the change iCrawler part based on your project name
-os.environ['DJANGO_SETTINGS_MODULE'] = 'mangalab.settings'
-
-# This is required only if Django Version > 1.8
-django.setup()
-
-# Scrapy settings for harvest project
+# Scrapy settings for scraper project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -21,14 +7,14 @@ django.setup()
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "harvest"
+BOT_NAME = "scraper"
 
-SPIDER_MODULES = ["harvest.spiders"]
-NEWSPIDER_MODULE = "harvest.spiders"
+SPIDER_MODULES = ["scraper.spiders"]
+NEWSPIDER_MODULE = "scraper.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "harvest (+http://www.yourdomain.com)"
+#USER_AGENT = "scraper (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -59,13 +45,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    "harvest.middlewares.HarvestSpiderMiddleware": 543,
+#    "scraper.middlewares.ScraperSpiderMiddleware": 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    "harvest.middlewares.HarvestDownloaderMiddleware": 543,
+#    "scraper.middlewares.ScraperDownloaderMiddleware": 543,
 #}
 
 # Enable or disable extensions
@@ -77,7 +63,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "harvest.pipelines.HarvestPipeline": 300,
+   "scraper.pipelines.ScrapyItemPipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -105,4 +91,3 @@ ITEM_PIPELINES = {
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
-

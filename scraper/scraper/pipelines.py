@@ -8,7 +8,7 @@
 from itemadapter import ItemAdapter
 
 
-class HarvestPipeline:
+class ScrapyItemPipeline(object):
     def process_item(self, item, spider):
         item.save()
         return item

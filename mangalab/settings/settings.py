@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-from unittest.mock import DEFAULT
+from mangalab.settings.get_env import DEBUG, SECRET_KEY
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-n9+6wd^k6zd!jz8@n3v5$bd-gadh4w58#^n4(-ln@e=i-$snmz'
+SECRET_KEY = SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if DEBUG == 'True':
+    DEBUG = True
+else:
+    DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -36,6 +39,7 @@ CUSTOM_APPS = [
     'anime.apps.AnimeConfig',
     'mangalab_web.apps.MangalabWebConfig',
     'users.apps.UsersConfig',
+    # 'harvest',
 ]
 
 THREAD_PARTY_APPS = []
