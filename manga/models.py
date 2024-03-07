@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from ckeditor.fields import RichTextField
+# from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class MnagaType(models.TextChoices):
@@ -17,7 +18,7 @@ class MangaList(models.Model):
     manga_type = models.CharField(
         choices=MnagaType.choices, default=MnagaType.OTHER,
         max_length=30)
-    description = RichTextField(blank=False, null=False)
+    description = CKEditor5Field(blank=False, null=False)
 
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
