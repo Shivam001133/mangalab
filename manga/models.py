@@ -30,6 +30,7 @@ class MangaList(models.Model):
 
 class MangaSource(models.TextChoices):
     MANHWAZ = 'manhwaz', _('Manhwaz')
+    MANGAKAKALOT = 'mangakakalot', _('Mangakakalot')
     OTHER = 'other', _('Other')
 
 
@@ -53,7 +54,8 @@ class TitleImage(models.Model):
 class ChapterList(models.Model):
     manga = models.ForeignKey(MangaList, on_delete=models.CASCADE,
                               related_name='mangachapter')
-    chapter_no = models.IntegerField(default=0, null=True, blank=True)
+    chapter_no = models.IntegerField(null=False, blank=False)
+    chapter_name = models.CharField(max_length=100, null=True, blank=True)
     latest = models.BooleanField(default=False)
     treanding = models.BooleanField(default=False)
     chapter_source = models.CharField(

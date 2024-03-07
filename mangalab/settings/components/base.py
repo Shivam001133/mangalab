@@ -42,7 +42,7 @@ CUSTOM_APPS = [
     'anime.apps.AnimeConfig',
     'mangalab_web.apps.MangalabWebConfig',
     'users.apps.UsersConfig',
-    'scraper',
+    'harvest',
     'django_ckeditor_5',
 ]
 

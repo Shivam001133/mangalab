@@ -2,8 +2,8 @@ from django.core.management.base import BaseCommand
 from scrapy.crawler import CrawlerProcess
 from scrapy.settings import Settings
 
-from scraper.scraper import settings as my_settings
-from scraper.scraper.spiders.mangakakalot import MangakakalotSpider
+import harvest.scraper.settings as scrapy_settings
+from harvest.scraper.spiders.mangakakalot import MangakakalotSpider
 
 
 class Command(BaseCommand):
@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         crawler_settings = Settings()
-        crawler_settings.setmodule(my_settings)
+        crawler_settings.setmodule(scrapy_settings)
 
         process = CrawlerProcess(settings=crawler_settings)
 
