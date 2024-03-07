@@ -1,3 +1,4 @@
+from tkinter import N
 import scrapy
 import logging
 from scrapy import Request
@@ -5,7 +6,9 @@ from scrapy import Request
 # from scrapy.loader.processors import TakeFirst
 from  harvest.scraper.scraper_helper import model_save_helper as save_helper
 from harvest.scraper.scraper_helper.specifie_helper import chapter_no_finder
+from harvest.scraper.scraper_helper.harvest_source import Mangakakalot
 from manga.models import MangaSource
+
 
 
 logger = logging.getLogger(__name__)
@@ -35,15 +38,28 @@ class MangakakalotSpider(scrapy.Spider):
                 'manga': instance,
                 'image': image.strip(),
                 'image_source': self.image_source,
-                'is_active': instance.is_active,
             }
             save_helper.save_title_image(data=data)
             
             logger.info(f"image data scraped {data} and manga {instance.title} saved")
-    
     def parse_manga(self, response):
         instance = response.meta['instance']
-        chapters_list = response.css('div.container div.main-wrapper div.leftCol div#chapter.chapter div.manga-info-chapter div.chapter-list div.row')
+
+        scraper_data = response.css('div.container div.main-wrapper div.leftCol')
+        chapters_list = scraper_data.css('div#chapter.chapter div.manga-info-chapter div.chapter-list div.row')
+
+        manga_description = response.xpath('//*[@id="panel-story-info-description"]').extract()
+        description = ''
+        for info in manga_description:
+            description += info.strip()
+        instance.description = description.strip()
+        instance.save()
+        if instance.description is None or instance.description == '':
+            manga_description = scraper_data.css('div#noidungm::text').getall()
+            for info in manga_description:
+                description += info.strip()
+            instance.description = description.strip()
+            instance.save()
 
         for chapter in chapters_list:
             chapter_url = chapter.css('span a::attr(href)').get()
@@ -62,5 +78,5 @@ class MangakakalotSpider(scrapy.Spider):
             except Exception as e:
                 logger.error(f"\n\nError: {e}\n\n")
 
-            logger.info(f" *********************Chapter {chapter_name} saved for {instance.title}")
+            logger.info(f"Chapter {chapter_name} saved for {instance.title}")
 

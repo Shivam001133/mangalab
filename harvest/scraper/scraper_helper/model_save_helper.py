@@ -10,8 +10,11 @@ def save_title_image(data=None):
     required_keys = ['manga', 'image', 'image_source']
     if all(key in data for key in required_keys):
         try:
-            TitleImage.objects.create(**data)
-            logger.info(f"Saved title image: {data['manga'].title}")
+            obj, created=TitleImage.objects.update_or_create(**data)
+            if obj:
+                logger.info(f"Updated title image: {data['manga'].title}")
+            elif created:
+                logger.info(f"created title image: {data['manga'].title}")
         except TitleImage.DoesNotExist as e:
             logger.error(f"Error: {e}")
             
@@ -28,9 +31,13 @@ def save_manga_list(data=None):
     required_keys = ['title', 'manga_url']
     if all(key in data for key in required_keys):
         try:
-            mangalist = MangaList.objects.create(**data)
-            logger.info(f"Saved manga list: {data['title']}")
-            return mangalist
+            obj, mangalist = MangaList.objects.update_or_create(**data)
+            if obj:
+                logger.info(f"Updated title image: {data['title']}")
+                return mangalist
+            elif mangalist:
+                logger.info(f"created title image: {data['title']}")
+                return mangalist
         except MangaList.DoesNotExist as e:
             print(f"Error: {e}")
         
@@ -44,7 +51,12 @@ def save_chapter_list(data=None):
     required_keys = ['manga', 'chapter_no', 'chapter_url', 'chapter_source']
     if all(key in data for key in required_keys):
         try:
-            ChapterList.objects.create(**data)
-            logger.info(f"Saved chapter list: {data['manga'].title}")
+            obj, chapter = ChapterList.objects.update_or_create(**data)
+            if obj:
+                logger.info(f"Updated title image: {data['manga'].title}")
+                return chapter
+            elif chapter:
+                logger.info(f"created title image: {data['manga'].title}")
+                return chapter
         except ChapterList.DoesNotExist as e:
             logger.error(f"Error: {e}")
