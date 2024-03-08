@@ -1,11 +1,10 @@
-from tkinter import N
 import scrapy
 import logging
 from scrapy import Request
 # from scrapy.loader import ItemLoader
 # from scrapy.loader.processors import TakeFirst
 from  harvest.scraper.scraper_helper import model_save_helper as save_helper
-from harvest.scraper.scraper_helper.specifie_helper import chapter_no_finder
+from harvest.scraper.scraper_helper.specifie_helper import extract_chapter_number
 from harvest.scraper.scraper_helper.harvest_source import Mangakakalot
 from manga.models import MangaSource
 
@@ -48,13 +47,15 @@ class MangakakalotSpider(scrapy.Spider):
         scraper_data = response.css('div.container div.main-wrapper div.leftCol')
         chapters_list = scraper_data.css('div#chapter.chapter div.manga-info-chapter div.chapter-list div.row')
 
-        manga_description = response.xpath('//*[@id="panel-story-info-description"]').extract()
+        manga_description = response.css(Mangakakalot.MANGA_DESCRIPTION).getall()
         description = ''
         for info in manga_description:
             description += info.strip()
+        print(f'##############################################{description}######################################################')
         instance.description = description.strip()
         instance.save()
         if instance.description is None or instance.description == '':
+            print('********************************************************************************************************')
             manga_description = scraper_data.css('div#noidungm::text').getall()
             for info in manga_description:
                 description += info.strip()
@@ -65,13 +66,16 @@ class MangakakalotSpider(scrapy.Spider):
             chapter_url = chapter.css('span a::attr(href)').get()
             chapter_name = chapter.css('span a::text').get()
 
-            chapter_no = chapter_no_finder(chapter_name)
+            volume, chapter_no = extract_chapter_number(chapter_name)
+            if volume is None or volume == '':
+                volume = 1
 
             try:
                 save_helper.save_chapter_list(data={
                     'manga': instance,
                     'chapter_no': chapter_no,
                     'chapter_name': chapter_name.strip(),
+                    'volume_no': volume,
                     'chapter_url': chapter_url.strip(),
                     'chapter_source': self.image_source,
                 })

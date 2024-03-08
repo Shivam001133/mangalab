@@ -4,17 +4,23 @@ import re
 logger = logging.getLogger(__name__)
 
 
-def chapter_no_finder(chapter_name: str) -> int:
+def extract_chapter_number(chapter_name: str) -> int:
     """
     Find the chapter number from the chapter name
     """
-    chapter_name = chapter_name.strip().split()
-    for data in chapter_name:
-        if data.isdigit():
-            try:
-                cleaned_string = re.sub(r'\W+', '', data)
-                return int(cleaned_string)
-            except ValueError as e:
-                logger.error(f"Error: {data} - {e}")
-    # rather than return 0 change it 
-    return 0
+    pattern = r'(volume|chapter)\s*([0-9:]+)'
+    matches = re.findall(pattern, chapter_name, flags=re.IGNORECASE)
+
+    volume = None
+    chapter = None
+
+    for match in matches:
+        keyword, value = match
+        if keyword.lower() == 'volume':
+            volume = int(re.sub(r'\W+', '', value))
+        elif keyword.lower() == 'chapter':
+            chapter = int(re.sub(r'\W+', '', value))
+
+    return volume, chapter
+
+

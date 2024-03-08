@@ -1,3 +1,4 @@
+from re import T
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 # from ckeditor.fields import RichTextField
@@ -47,15 +48,16 @@ class TitleImage(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # def __str__(self) -> str:
-    #     return self.manga.title
+    def __str__(self) -> str:
+        return self.manga.title
 
 
 class ChapterList(models.Model):
     manga = models.ForeignKey(MangaList, on_delete=models.CASCADE,
                               related_name='mangachapter')
-    chapter_no = models.IntegerField(null=False, blank=False)
+    chapter_no = models.IntegerField(null=True, blank=True)
     chapter_name = models.CharField(max_length=100, null=True, blank=True)
+    volume_no = models.PositiveSmallIntegerField(default=1)
     latest = models.BooleanField(default=False)
     treanding = models.BooleanField(default=False)
     chapter_source = models.CharField(
@@ -67,6 +69,6 @@ class ChapterList(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # def __str__(self) -> str:
-    #     return self.manga.title
+    def __str__(self) -> str:
+        return self.manga.title
     
