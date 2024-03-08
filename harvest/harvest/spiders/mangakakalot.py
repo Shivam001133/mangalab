@@ -3,11 +3,9 @@ import logging
 from scrapy import Request
 # from scrapy.loader import ItemLoader
 # from scrapy.loader.processors import TakeFirst
-from  harvest.scraper.scraper_helper import model_save_helper as save_helper
-from harvest.scraper.scraper_helper.specifie_helper import extract_chapter_number
-from harvest.scraper.scraper_helper.harvest_source import Mangakakalot
+from  harvest.harvest.scraper_helper import model_save_helper as save_helper
+from harvest.harvest.scraper_helper.specifie_helper import extract_chapter_number
 from manga.models import MangaSource
-
 
 
 logger = logging.getLogger(__name__)
@@ -41,25 +39,27 @@ class MangakakalotSpider(scrapy.Spider):
             save_helper.save_title_image(data=data)
             
             logger.info(f"image data scraped {data} and manga {instance.title} saved")
+
     def parse_manga(self, response):
         instance = response.meta['instance']
 
         scraper_data = response.css('div.container div.main-wrapper div.leftCol')
         chapters_list = scraper_data.css('div#chapter.chapter div.manga-info-chapter div.chapter-list div.row')
 
-        manga_description = response.css(Mangakakalot.MANGA_DESCRIPTION).getall()
+        manga_description = scraper_data.css('div#noidungm::text').getall()
         description = ''
         for info in manga_description:
             description += info.strip()
-        print(f'##############################################{description}######################################################')
-        instance.description = description.strip()
-        instance.save()
-        if instance.description is None or instance.description == '':
-            print('********************************************************************************************************')
-            manga_description = scraper_data.css('div#noidungm::text').getall()
-            for info in manga_description:
-                description += info.strip()
-            instance.description = description.strip()
+        if not instance.description:
+            instance.description = description
+            instance.save()
+
+        manga_description = response.xpath('//*[@id="panel-story-info-description"]/text()').getall()
+        logger.info(f"asdfsadf ******** {manga_description}")
+        for info in manga_description:
+            description += info.strip()
+        if description:
+            instance.description = description
             instance.save()
 
         for chapter in chapters_list:

@@ -20,7 +20,9 @@ def extract_chapter_number(chapter_name: str) -> int:
             volume = int(re.sub(r'\W+', '', value))
         elif keyword.lower() == 'chapter':
             chapter = int(re.sub(r'\W+', '', value))
-
-    return volume, chapter
+    try:
+        return volume, chapter
+    except Exception as e :
+        logger.error(f"Error in extracting chapter number {e}")
 
 

@@ -5,10 +5,12 @@
 
 
 # useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
+
+# from itemadapter import ItemAdapter
 
 
-class ScrapyItemPipeline(object):
+class HarvestPipeline:
     def process_item(self, item, spider):
         item.save()
         return item
+

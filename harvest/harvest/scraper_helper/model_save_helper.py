@@ -1,5 +1,6 @@
 import logging
 from manga.models import MangaList, ChapterList, TitleImage
+from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
@@ -60,3 +61,14 @@ def save_chapter_list(data=None):
                 return obj
         except ChapterList.DoesNotExist as e:
             logger.error(f"Error: {e}")
+
+def MnagaDescription(instance=None):
+    """
+    Save the manga description
+    """
+    try:
+        MangaList.objects.filter(description__isnull=True,
+        )
+        logger.info(f"Updated title image: {instance.title}")
+    except Exception as e:
+        logger.error(f"Error: {e}")

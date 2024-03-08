@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import (MangaList, TitleImage, ChapterList)
+from django.template.defaultfilters import truncatechars
 from django.db.models import Q
 
 
@@ -24,26 +25,40 @@ class DescriptionFilter(admin.SimpleListFilter):
                 Q(description__exact=''))
 
 
+
+
+
 class MangaListAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description', 'manga_type', 'is_active', 'created_at')
+    list_display = ('title', 'short_description', 'manga_type', 'is_active', 'created_at', )
     list_filter = ('manga_type', DescriptionFilter, 'is_active', 'created_at', 'updated_at')
     readonly_fields = ('created_at', 'updated_at')
     # search_fields = ('title', 'manga_url')
 
+    def short_description(self, obj):
+        return truncatechars(obj.description, 100)
+    short_description.short_description = 'Short Description'
+
 
 class TitleImageAdmin(admin.ModelAdmin):
-    list_display = ('manga', 'image_source', 'is_active', 'created_at')
+    list_display = ('manga_title', 'image_source', 'is_active', 'created_at')
     list_filter = ('image_source', 'is_active', 'created_at', 'updated_at')
     readonly_fields = ('created_at', 'updated_at')
     # search_fields = ('manga', 'image')
 
+    def manga_title(self, obj):
+        return truncatechars(obj.manga.title, 30)
+    manga_title.short_description = 'Manga Title'
+
 class ChapterListAdmin(admin.ModelAdmin):
-    list_display = ('manga', 'chapter_no', 'latest', 'treanding', 'chapter_source', 'is_live', 'created_at')
+    list_display = ('manga_title', 'chapter_no', 'latest', 'treanding', 'chapter_source', 'is_live', 'created_at')
     list_filter = ('latest', 'treanding', 'chapter_source', 'is_live', 'created_at', 'updated_at')
     readonly_fields = ('created_at', 'updated_at')
     # search_fields = ('manga', 'chapter_no', 'chapter_url')
 
-admin.site.register(MangaList, MangaListAdmin)
+    def manga_title(self, obj):
+        return truncatechars(obj.manga.title, 30)
+    manga_title.short_description = 'Manga Title'
+
 admin.site.register(TitleImage, TitleImageAdmin)
 admin.site.register(ChapterList, ChapterListAdmin)
-
+admin.site.register(MangaList, MangaListAdmin)

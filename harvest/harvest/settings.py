@@ -1,4 +1,4 @@
-# Scrapy settings for scraper project
+# Scrapy settings for harvest project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,14 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "scraper"
+BOT_NAME = "harvest"
 
-SPIDER_MODULES = ["harvest.scraper.spiders"]
-NEWSPIDER_MODULE = "harvest.scraper.spiders"
+SPIDER_MODULES = ["harvest.harvest.spiders"]
+NEWSPIDER_MODULE = "harvest.harvest.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "scraper (+http://www.yourdomain.com)"
+#USER_AGENT = "harvest (+http://www.yourdomain.com)"
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36'
 
 # Obey robots.txt rules
@@ -46,13 +46,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    "scraper.middlewares.ScraperSpiderMiddleware": 543,
+#    "harvest.middlewares.HarvestSpiderMiddleware": 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    "scraper.middlewares.ScraperDownloaderMiddleware": 543,
+#    "harvest.middlewares.HarvestDownloaderMiddleware": 543,
 #}
 
 # Enable or disable extensions
@@ -64,7 +64,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   "harvest.scraper.pipelines.ScrapyItemPipeline": 300,
+   "harvest.harvest.pipelines.HarvestPipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
