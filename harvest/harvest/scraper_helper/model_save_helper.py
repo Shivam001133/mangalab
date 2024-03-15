@@ -4,7 +4,7 @@ from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
-def save_title_image(data=None):
+def save_title_image(data:dict=None):
     """
     Save the title image of the manga
     """
@@ -19,7 +19,7 @@ def save_title_image(data=None):
         except TitleImage.DoesNotExist as e:
             logger.error(f"Error: {e}")
             
-def save_manga_list(data=None):
+def save_manga_list(data:dict=None):
     """
     Save the manga list
 
@@ -33,17 +33,18 @@ def save_manga_list(data=None):
     if all(key in data for key in required_keys):
         try:
             obj, created = MangaList.objects.get_or_create(**data)
-            if created:
-                logger.info(f"created title image: {data['title']}")
+            if not created:
+                if obj.description:
+                    return None
                 return obj
             else:
-                logger.info(f"get title image: {data['title']}")
+                logger.info(f"created title image: {data['title']}")
                 return obj
         except MangaList.DoesNotExist as e:
             print(f"Error: {e}")
         
 
-def save_chapter_list(data=None):
+def save_chapter_list(data:dict=None):
     """
 
     Args:

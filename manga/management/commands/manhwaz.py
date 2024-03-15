@@ -16,4 +16,4 @@ class Command(BaseCommand):
         process = CrawlerProcess(settings=crawler_settings)
 
         process.crawl(ManhwazSpider)
-        # process.start()
+        process.start()

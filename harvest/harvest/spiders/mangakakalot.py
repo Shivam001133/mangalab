@@ -55,7 +55,6 @@ class MangakakalotSpider(scrapy.Spider):
             instance.save()
 
         manga_description = response.xpath('//*[@id="panel-story-info-description"]/text()').getall()
-        logger.info(f"asdfsadf ******** {manga_description}")
         for info in manga_description:
             description += info.strip()
         if description:
