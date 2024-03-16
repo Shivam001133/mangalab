@@ -7,6 +7,7 @@ exclude =
     __pycache__,
     migrations,
     astro_web/settings,
+    settings.py,
 
 # Include specific files or directories where you want to apply custom rules
 per-file-ignores =

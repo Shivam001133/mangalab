@@ -29,6 +29,7 @@ class MangaList(models.Model):
 
 
 class MangaSource(models.TextChoices):
+    BATO = 'bato', _('Bato')
     MANHWAZ = 'manhwaz', _('Manhwaz')
     MANGAKAKALOT = 'mangakakalot', _('Mangakakalot')
     OTHER = 'other', _('Other')
