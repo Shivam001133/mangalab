@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 # from ckeditor.fields import RichTextField
 from django_ckeditor_5.fields import CKEditor5Field
+from manga.helpers import messages as msg
 
 
 class MnagaType(models.TextChoices):
@@ -19,7 +20,6 @@ class MangaList(models.Model):
         choices=MnagaType.choices, default=MnagaType.OTHER,
         max_length=30)
     description = CKEditor5Field(blank=False, null=False)
-
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -40,9 +40,8 @@ class TitleImage(models.Model):
                               null=True, blank=True)
     image = models.URLField(unique=True)
     image_source = models.CharField(
-        max_length=50, choices=MangaSource.choices, 
+        max_length=50, choices=MangaSource.choices,
         default=MangaSource.OTHER)
-    
     is_active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -70,4 +69,3 @@ class ChapterList(models.Model):
 
     def __str__(self) -> str:
         return self.manga.title
-    

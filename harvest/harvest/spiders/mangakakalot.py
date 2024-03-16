@@ -3,12 +3,13 @@ import logging
 from scrapy import Request
 # from scrapy.loader import ItemLoader
 # from scrapy.loader.processors import TakeFirst
-from  harvest.harvest.scraper_helper import model_save_helper as save_helper
+from harvest.harvest.scraper_helper import model_save_helper as save_helper
 from harvest.harvest.scraper_helper.specifie_helper import extract_chapter_number
 from manga.models import MangaSource
 
 
 logger = logging.getLogger(__name__)
+
 
 class MangakakalotSpider(scrapy.Spider):
     name = "mangakakalot"
@@ -37,7 +38,6 @@ class MangakakalotSpider(scrapy.Spider):
                 'image_source': self.image_source,
             }
             save_helper.save_title_image(data=data)
-            
             logger.info(f"image data scraped {data} and manga {instance.title} saved")
 
     def parse_manga(self, response):
@@ -82,4 +82,3 @@ class MangakakalotSpider(scrapy.Spider):
                 logger.error(f"\n\nError: {e}\n\n")
 
             logger.info(f"Chapter {chapter_name} saved for {instance.title}")
-

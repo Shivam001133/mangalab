@@ -1,0 +1,15 @@
+[flake8]
+ignore = E999, W503, W504, C901
+exclude =
+    # No need to traverse our git directory
+    .git,
+    node_modules,
+    __pycache__,
+    migrations,
+    astro_web/settings,
+
+# Include specific files or directories where you want to apply custom rules
+per-file-ignores =
+    harvest/harvest/scraper_helper/harvest_source.py:E501,
+    harvest/harvest/spiders/*:E501
+    manga/helper/messages.py:E501

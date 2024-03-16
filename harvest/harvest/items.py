@@ -4,7 +4,8 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 from scrapy_djangoitem import DjangoItem
-from manga.models import TitleImage 
+from manga.models import TitleImage
+
 
 class ImageItem(DjangoItem):
     django_model = TitleImage
