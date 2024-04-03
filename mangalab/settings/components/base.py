@@ -42,11 +42,15 @@ CUSTOM_APPS = [
     'anime.apps.AnimeConfig',
     'mangalab_web.apps.MangalabWebConfig',
     'users.apps.UsersConfig',
-    'harvest',
-    'django_ckeditor_5',
 ]
 
-THREAD_PARTY_APPS = []
+THREAD_PARTY_APPS = [
+    'rest_framework',
+    'rest_framework.authtoken',
+    'django_ckeditor_5',
+    'harvest',
+    'django_extensions',
+]
 
 DEFAULT_APP = [
     'django.contrib.admin',
@@ -145,3 +149,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}

@@ -1,6 +1,5 @@
 import scrapy
 import logging
-import re
 from scrapy import Request
 from harvest.harvest.scraper_helper import model_save_helper as save_helper
 from harvest.harvest.scraper_helper.specifie_helper import extract_chapter_number
@@ -45,7 +44,7 @@ class BatoSpider(scrapy.Spider):
             save_helper.save_title_image(data=data)
             if instance:
                 logger.info(f"image data saved {instance.title} ")
-            logger.info(f"manga img saved")
+            logger.info("manga img saved")
 
     def parse_manga(self, response):
         instance = response.meta['instance']
