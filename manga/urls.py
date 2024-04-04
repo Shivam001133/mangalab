@@ -1,14 +1,7 @@
-from .apis import MangaListApi
-from rest_framework.urlpatterns import format_suffix_patterns
+from manga import apis
 from django.urls import path
-from rest_framework import routers
-router = routers.SimpleRouter()
-
-# router.register(r'xyz', MangaListApi,
-#                 basename='manga-list')
 
 urlpatterns = [
-    path('list/', MangaListApi.as_view()),
+    path('manga-list/', apis.manga_list,
+         name='manga-list'),
 ]
-
-# urlpatterns = format_suffix_patterns(urlpatterns)
