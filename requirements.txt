@@ -1,10 +1,10 @@
 asgiref>=3.7,<4.0
 attrs>=23.2,<24.0
 Automat>=22.10,<23.0
-certifi>=2024.2.2
+certifi==2024.2.2
 cffi>=1.15,<2.0
 charset-normalizer>=3.3,<4.0
-constantly>=23.10,<24.0
+constantly>=23.10.0,<24.0
 cryptography>=42.0,<43.0
 cssselect>=1.2,<2.0
 Django>=4.2,<5.0
