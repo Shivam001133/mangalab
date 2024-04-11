@@ -39,10 +39,12 @@ urlpatterns = [
     path("ckeditor5/", include('django_ckeditor_5.urls')),
     path('manga/', include('manga.urls')),
     path('api-token-auth/', views.obtain_auth_token),
-    path('mangalab-web/', include('mangalab_web.urls')),
+    path('asdf/', include('mangalab_web.urls')),
     path('api-docs/', schema_view.with_ui('swagger', cache_timeout=0),
          name='schema-swagger-ui'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(
