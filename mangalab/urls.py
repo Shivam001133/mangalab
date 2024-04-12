@@ -38,8 +38,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
     path('manga/', include('manga.urls')),
+    path('user/', include('users.urls')),
     path('api-token-auth/', views.obtain_auth_token),
-    path('asdf/', include('mangalab_web.urls')),
+    path('', include('mangalab_web.urls')),
     path('api-docs/', schema_view.with_ui('swagger', cache_timeout=0),
          name='schema-swagger-ui'),
 ] 

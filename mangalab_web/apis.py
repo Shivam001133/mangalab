@@ -15,6 +15,6 @@ def menu_title(request):
 
 @api_view(['GET'])
 def manga_categories(request):
-    manga_categories = MangaCategories.objects.filter(treanding=True)
+    manga_categories = MangaCategories.objects.filter(is_active=True)
     serializer = MangaCategoriesSerializers(manga_categories, many=True)
     return Response(serializer.data)
