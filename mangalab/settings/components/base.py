@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 # from pathlib import Path
 import os
-from mangalab.settings.components.get_env import DEBUG, SECRET_KEY
+import sys
+import dj_database_url
+from mangalab.settings.components.get_env import DEBUG, SECRET_KEY, ALLOWED_HOSTS, DEVELOPMENT_MODE
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent ## This is the original line
@@ -28,11 +30,12 @@ SECRET_KEY = SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if DEBUG == 'True':
-    DEBUG = True
+    DEBUG = DEBUG
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+
+ALLOWED_HOSTS = ALLOWED_HOSTS
 
 
 # Application definition
@@ -99,13 +102,19 @@ WSGI_APPLICATION = 'mangalab.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if DEVELOPMENT_MODE is True:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
     }
-}
-
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -143,7 +152,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-     os.path.join(BASE_DIR, "static"),
+     os.path.join(BASE_DIR, "staticfiles"),
 ]
 # STATIC_ROOT = (BASE_DIR /'staticfiles')
 
@@ -160,3 +169,5 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', 
     'PAGE_SIZE': 2, 
 }
+
+DEVELOPMENT_MODE = DEVELOPMENT_MODE
