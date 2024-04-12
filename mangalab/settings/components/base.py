@@ -35,7 +35,7 @@ else:
     DEBUG = False
 
 
-ALLOWED_HOSTS = ALLOWED_HOSTS
+ALLOWED_HOSTS = ["mangalab.onrender.com"]
 
 
 # Application definition
