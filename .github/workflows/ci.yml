@@ -6,10 +6,7 @@ on:
   pull_request:
     branches: [ "main" ]
 
-# lint-jobs:
-
-jobs:
-
+lint-jobs:
   lint:
     runs-on: ubuntu-latest
     strategy:
@@ -22,11 +19,9 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: |
-        pip install flake8
-        flake8 .
+    - uses: actions/py-actions@v2
 
+jobs:
   build:
     needs: lint-job
     runs-on: ubuntu-latest
