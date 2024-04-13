@@ -43,9 +43,11 @@ urlpatterns = [
     path('', include('mangalab_web.urls')),
     path('api-docs/', schema_view.with_ui('swagger', cache_timeout=0),
          name='schema-swagger-ui'),
-] 
-urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
+urlpatterns = urlpatterns + static(
+    settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns = urlpatterns + static(
+    settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(

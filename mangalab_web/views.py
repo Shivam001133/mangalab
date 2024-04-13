@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from manga.models import MangaList, TitleImage
+# from django.shortcuts import render
+# from manga.models import MangaList, TitleImage
 
 
 # def indexView(request):
@@ -15,7 +15,8 @@ from manga.models import MangaList, TitleImage
 #     for i in data:
 #         print(f"**** {i}")
 
-#     return render(request, 'anime-main/index.html', context={"context": data})
+#     return render(request, 'anime-main/index.html',
+#                   context={"context": data})
 
 # def animeDetailView(request):
 #     return render(request, 'anime-main/anime-details.html')

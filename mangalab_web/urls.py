@@ -1,6 +1,6 @@
 from mangalab_web import apis
 from django.urls import path
-from mangalab_web import views
+# from mangalab_web import views
 # from rest_framework import routers
 # router = routers.SimpleRouter()
 
@@ -15,4 +15,4 @@ urlpatterns = [
     # path('blog/', views.blogView, name='blog'),
     # path('blog-detail/', views.blogDetailView, name='blog-detail'),
     # path('categories/', views.categoriesView, name='catego;ries')
-    ]
+]

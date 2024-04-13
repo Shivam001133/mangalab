@@ -1,5 +1,5 @@
-from .models import MangaList, TitleImage, ChapterList
-from .serializers import MangaSerializer, ImgSerializer, ChapterSerializer
+from .models import MangaList
+from .serializers import MangaSerializer
 from helpers.helper import get_paginated_data
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
