@@ -6,8 +6,8 @@ on:
   pull_request:
     branches: [ "main" ]
 
-lint-jobs:
-  lint:
+jobs:
+  lint-job:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -21,7 +21,6 @@ lint-jobs:
         python-version: ${{ matrix.python-version }}
     - uses: actions/py-actions@v29
 
-jobs:
   build:
     needs: lint-job
     runs-on: ubuntu-latest
