@@ -19,7 +19,7 @@ lint-jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - uses: actions/py-actions@v2
+    - uses: actions/py-actions@v29
 
 jobs:
   build:
