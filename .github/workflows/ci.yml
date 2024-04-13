@@ -6,7 +6,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
-lint-job:
+# lint-jobs:
+
+jobs:
+
   lint:
     runs-on: ubuntu-latest
     strategy:
@@ -24,7 +27,6 @@ lint-job:
         pip install flake8
         flake8 .
 
-jobs:
   build:
     needs: lint-job
     runs-on: ubuntu-latest
