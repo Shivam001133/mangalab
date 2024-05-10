@@ -7,7 +7,9 @@ INSTALLED_APPS += (
 )
 
 include(
+    'components/get_env.py',
     'components/base.py',
     'components/django_ckeditor.py',
-    'components/get_env.py',
+    'components/celery.py',
+    'components/loging.py',
 )

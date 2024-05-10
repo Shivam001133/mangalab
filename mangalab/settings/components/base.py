@@ -12,16 +12,15 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 # from pathlib import Path
 import os
-import sys
-import dj_database_url
-from mangalab.settings.components.get_env import DEBUG, SECRET_KEY, ALLOWED_HOSTS, DEVELOPMENT_MODE
+from mangalab.settings.components.get_env import (
+    DEBUG, SECRET_KEY, ALLOWED_HOSTS, DEVELOPMENT_MODE, MYSQL_DB_HOST, MYSQL_DB_NAME,
+    MYSQL_DB_PORT, MYSQL_PASSWORD, MYSQL_USER)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent ## This is the original line
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -34,9 +33,14 @@ if DEBUG == 'True':
 else:
     DEBUG = False
 
-
 ALLOWED_HOSTS = ALLOWED_HOSTS
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
 
 # Application definition
 CUSTOM_APPS = [
@@ -55,6 +59,20 @@ THREAD_PARTY_APPS = [
     'django_extensions',
     'rest_framework_swagger',
     'drf_yasg',
+    # 'kombu.transport.django',                
+    # 'celery',                                 # dont know why but after adding comment it works
+    # Helaht check
+    'health_check',                             # required
+    'health_check.db',                          # stock Django health checkers
+    'health_check.cache',
+    'health_check.storage',
+    'health_check.contrib.migrations',
+    'health_check.contrib.celery',              # requires celery
+    'health_check.contrib.celery_ping',         # requires celery
+    'health_check.contrib.psutil',              # disk and memory utilization; requires psutil
+    'health_check.contrib.s3boto3_storage',     # requires boto3 and S3BotoStorage backend
+    'health_check.contrib.rabbitmq',            # requires RabbitMQ broker
+    'health_check.contrib.redis',               # requires Redis broker
 ]
 
 DEFAULT_APP = [
@@ -102,19 +120,19 @@ WSGI_APPLICATION = 'mangalab.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-if DEVELOPMENT_MODE is True:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': MYSQL_DB_NAME,
+        'USER': MYSQL_USER,
+        'PASSWORD': MYSQL_PASSWORD,
+        'HOST': MYSQL_DB_HOST,
+        'PORT': MYSQL_DB_PORT,
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES', innodb_strict_mode=1",
+        },
     }
-elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
-    if os.getenv("DATABASE_URL", None) is None:
-        raise Exception("DATABASE_URL environment variable not defined")
-    DATABASES = {
-        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
-    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

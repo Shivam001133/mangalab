@@ -70,3 +70,14 @@ uritemplate==4.1.1
 urllib3==2.2.1
 w3lib==2.1.2
 zope.interface==6.2
+django-health-check==3.18.
+celery==5.3.6
+django-celery-beat==2.6.0
+django-celery-results== 2.5.1
+flower==2.0.1
+redis==5.0.1
+mysqlclient==2.2.4
+psutil==5.9.8
+memcachedcache==0.0.2
+pymemcache==4.0.0
+kombu==5.3.7

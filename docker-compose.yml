@@ -1,0 +1,133 @@
+version: "3.8"
+services:
+  mangalab-db:
+    image: mariadb:10.6
+    container_name: mangalab-db
+    restart: always
+    ports:
+      - "${MYSQL_DB_PORT}:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DB_HOST: ${MYSQL_DB_HOST}
+    volumes:
+      - mangalab_dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - elastic
+
+  mangalab-backend:
+    build:
+      context: .
+      dockerfile: env/Dockerfile
+    entrypoint: ["./env/dev/docker-entrypoint.sh"]
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/app
+    ports:
+      - "${DJANGO_SERVER_PORT}:${DJANGO_SERVER_PORT}"
+    depends_on:
+      - mangalab-db
+    environment:
+      DJANGO_SERVER_PORT: ${DJANGO_SERVER_PORT}
+    networks:
+      - elastic
+  
+  mangalab-rabbitmq:
+    image: rabbitmq:3.13-management
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_DEFAULT_VHOST}
+    ports:
+      - "${RABBITMQ_PORT}:${RABBITMQ_PORT}"
+      - "${RABBITMQ_MANAGEMENT_PORT}:${RABBITMQ_MANAGEMENT_PORT}" # access rabbitmq management plugin on this port
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    networks:
+      - elastic
+    delay: 10s
+
+  mangalab-celery-worker:
+    restart: always
+    build:
+      context: .
+      dockerfile: env/Dockerfile
+    volumes:
+      - .:/app
+    depends_on:
+      - mangalab-db
+      - mangalab-backend
+      - mangalab-rabbitmq
+    networks:
+      - elastic
+
+  mangalab-celery-beat:
+    restart: always
+    build:
+      context: .
+      dockerfile: env/Dockerfile
+    volumes:
+      - .:/app
+    depends_on:
+      - mangalab-db
+      - mangalab-backend
+      - mangalab-rabbitmq
+    networks:
+      - elastic
+
+  mangalab-flower:
+    restart: always
+    image: mher/flower
+    ports:
+      - "${CELERY_FLOWER_PORT}:5555"
+    depends_on:
+      - mangalab-backend
+      - mangalab-db
+      - mangalab-rabbitmq
+      - mangalab-celery-worker
+      - es
+    networks:
+      - elastic
+
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms3g -Xmx3g"
+    ports:
+      - "9800:9800"
+    healthcheck:
+      test: curl --fail http://localhost:9200/_cat/health || exit 1
+      interval: 10s
+      timeout: 10s
+    networks:
+      - elastic
+
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6490:6480'
+    command: redis-server --save 20 1 --loglevel debug
+    volumes: 
+      - redisdata:/data
+    networks:
+      - elastic
+
+volumes:
+  mangalab_dbdata:
+  rabbitmqdata:
+  redisdata:
+
+networks:
+  elastic:
