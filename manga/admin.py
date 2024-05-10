@@ -1,8 +1,12 @@
 from django.contrib import admin
 from .models import (MangaList, TitleImage, ChapterList)
 from django.template.defaultfilters import truncatechars
+from django.urls import reverse
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.db.models import Q
 
+from helpers.val_storage import img_pop_html_code
 
 class DescriptionFilter(admin.SimpleListFilter):
     title = 'description'
@@ -59,6 +63,7 @@ class ChapterListAdmin(admin.ModelAdmin):
 
     def manga_title(self, obj):
         return truncatechars(obj.manga.title, 30)
+
     manga_title.short_description = 'Manga Title'
 
 

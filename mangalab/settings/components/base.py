@@ -42,6 +42,26 @@ CACHES = {
     }
 }
 
+# logger
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'error.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
 # Application definition
 CUSTOM_APPS = [
     'manga.apps.MangaConfig',
@@ -94,6 +114,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     'manga.middleware.ErrorLoggingMiddleware',
 ]
 
 ROOT_URLCONF = 'mangalab.urls'
@@ -172,7 +193,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
      os.path.join(BASE_DIR, "staticfiles"),
 ]
-# STATIC_ROOT = (BASE_DIR /'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Media files (Images, Videos)
 MEDIA_URL = '/media/'

@@ -11,5 +11,4 @@ include(
     'components/base.py',
     'components/django_ckeditor.py',
     'components/celery.py',
-    'components/loging.py',
 )

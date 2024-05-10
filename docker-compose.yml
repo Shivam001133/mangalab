@@ -17,11 +17,24 @@ services:
       - mangalab_dbdata:/var/lib/mysql
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
-      interval: 10s
-      timeout: 5s
+      interval: "10s"
+      timeout: "5s"
       retries: 3
     networks:
       - elastic
+
+  # selenium-hub:
+  #   image: selenium/hub:3.141.59
+  #   ports:
+  #     - "4444:4444"
+
+  # chrome:
+  #   image: selenium/node-chrome:3.141.59
+  #   depends_on:
+  #     - selenium-hub
+  #   environment:
+  #     - HUB_HOST=selenium-hub
+  #     - HUB_PORT=4444
 
   mangalab-backend:
     build:
@@ -55,7 +68,6 @@ services:
       - rabbitmqdata:/var/lib/rabbitmq
     networks:
       - elastic
-    delay: 10s
 
   mangalab-celery-worker:
     restart: always
@@ -108,8 +120,8 @@ services:
       - "9800:9800"
     healthcheck:
       test: curl --fail http://localhost:9200/_cat/health || exit 1
-      interval: 10s
-      timeout: 10s
+      interval: "10s"
+      timeout: "5s"
     networks:
       - elastic
 
