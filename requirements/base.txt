@@ -29,6 +29,6 @@ Scrapy==2.11.2
 beautifulsoup4==4.12.3
 scrapy-djangoitem==1.1.1
 # scrapy-playwrite
-scrapy-playwright==0.0.5
+scrapy-playwright==0.0.41
 playwright==1.47.0
 user-agent==0.1.10
