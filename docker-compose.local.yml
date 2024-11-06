@@ -1,0 +1,85 @@
+volumes:
+  manga_lab_local_postgres_data: {}
+  manga_lab_local_postgres_data_backups: {}
+  manga_lab_local_redis_data: {}
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: manga_lab_local_django
+    container_name: mangalab_local_django
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - .:/app:z
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - '8000:8000'
+    command: /start
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: manga_lab_production_postgres
+    container_name: mangalab_local_postgres
+    volumes:
+      - manga_lab_local_postgres_data:/var/lib/postgresql/data
+      - manga_lab_local_postgres_data_backups:/backups
+    env_file:
+      - ./.envs/.local/.postgres
+
+  redis:
+    image: docker.io/redis:6
+    container_name: mangalab_local_redis
+    
+    volumes:
+      - manga_lab_local_redis_data:/data
+
+  celeryworker:
+    <<: *django
+    image: manga_lab_local_celeryworker
+    container_name: mangalab_local_celeryworker
+    depends_on:
+      - redis
+      - postgres
+    ports: []
+    command: /start-celeryworker
+
+  celerybeat:
+    <<: *django
+    image: manga_lab_local_celerybeat
+    container_name: mangalab_local_celerybeat
+    depends_on:
+      - redis
+      - postgres
+    ports: []
+    command: /start-celerybeat
+
+  flower:
+    <<: *django
+    image: manga_lab_local_flower
+    container_name: mangalab_local_flower
+    ports:
+      - '5555:5555'
+    command: /start-flower
+  
+  scrapy:
+    <<: *django
+    container_name: mangalab_local_scrapy
+    volumes:
+      - .:/app
+    environment:
+      - PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    ports:
+      - '1515:8000'
