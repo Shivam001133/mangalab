@@ -1,11 +1,12 @@
 # ruff: noqa: ERA001, E501
 from user_agent import generate_user_agent
 import django
+from pathlib import Path
 import os
 import sys
 
 # Add the Django project's path to sys.path
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__name__)))
+PROJECT_DIR = Path(__file__).resolve().parent.parent
 
 sys.path.insert(0, PROJECT_DIR)
 os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings"

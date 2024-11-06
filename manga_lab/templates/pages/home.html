@@ -1,3 +1,78 @@
 {% extends "base.html" %}
+{% load static %}
+{% block meta_extend %}
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
+<title>{% block title %} MangaLab {% endblock title %} </title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="This is scraping project for manga lab" />
+<meta name="author" content="Shivam Pandey" />
+<link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+{% endblock %}
+{% block css %}
+<style>
+  .carousel-inner{
+    height: 600px !important;
+  }
+</style>
+{% endblock css %}
 
 
+{% block content %}
+<div id="carouselExampleIndicators" class="carousel slide carousel-fade">
+    <ol class="carousel-indicators">
+      {% for data in banner %}
+        <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+      {% endfor %}
+    </ol>
+    
+    <div class="carousel-inner">
+      {% for data in banner %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img class="d-block w-100 img-fluid" src="{{ data.image_url }}" alt="Slide {{ forloop.counter }}">
+        </div>
+      {% endfor %}
+    </div>
+    
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </a>
+</div>
+<div class="container">
+  <div class="row">
+    {% for item in data %}
+    <div class="col-md-3 mb-4">
+      <div class="item-thumb hover-details c-image-hover">
+        <a href="{{ item.url }}" title="{{ item.title }}">
+          <img width="175" height="238" class="img-responsive" src="{{ item.img_url }}" title="{{ item.title }}" alt="{{ item.slanged_title }}">
+        </a>
+      </div>
+      <div class="item-summary">
+        <div class="post-title font-title">
+          <h3 class="line-2 pt-2">
+            <a href="{{ item.url }}">{{ item.title }}</a>
+          </h3>
+        </div>
+        <div class="list-chapter">
+          <div class="chapter-item">
+            <span class="chapter font-meta">
+              <a href="{{ item.chapter_url }}" class="btn-link">{{ item.chapter_title }}</a>
+            </span>
+            <span class="post-on font-meta">{{ item.time_desc }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if forloop.counter|divisibleby:4 %}
+  </div>
+  <div class="row">
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock content %}

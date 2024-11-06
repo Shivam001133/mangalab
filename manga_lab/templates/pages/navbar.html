@@ -1,0 +1,86 @@
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<style>
+  @media (max-width: 768px) {
+  .dropdown-menu-end {
+    right: auto !important;
+    left: 0 !important;
+  }
+}
+</style>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-to" style="background-color: #1c2331" data-bs-theme="dark">
+  <!-- Container wrapper -->
+  <div class="container-fluid">
+    <!-- Navbar brand -->
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="{% static 'images/logo/MangaLab.svg' %}" alt="MangaLab" width="200" height="44">
+    </a>
+
+    <!-- Toggle button -->
+    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'home' %}">Home <span class="visually-hidden">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Manga</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Anime</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'about' %}">About</a>
+        </li>
+      </ul>
+      <!-- Left links -->
+
+      <!-- Search form -->
+      <form class="d-flex input-group w-auto me-4">
+        <input type="search" class="form-control" placeholder="Manga or Anime" aria-label="Search" />
+        <button class="btn btn-outline-primary" type="button" data-mdb-ripple-color="dark" style="padding: .45rem 1.5rem .35rem;">
+          Search
+        </button>
+      </form>
+      {% if request.user.is_authenticated %}
+      <ul class="navbar-nav mb-2 mb-lg-0" style="width:80px;">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(2).jpg" class="rounded-circle img-fluid" height="35" width="35">
+          </a>
+          <!-- Add custom inline style to force the dropdown to align left -->
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown" style="left: auto; right: 0;">
+            <li>
+              <a class="dropdown-item" href="{% url 'users:detail' request.user.pk %}">{% translate "My Profile" %}</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      {% else %}
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if ACCOUNT_ALLOW_REGISTRATION %}
+          <li class="nav-item">
+            <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
+          </li>
+        {% endif %}
+        <li class="nav-item">
+          <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+    <!-- Collapsible wrapper -->
+  </div>
+  <!-- Container wrapper -->
+</nav>
