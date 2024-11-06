@@ -1,5 +1,6 @@
 
-{% load static i18n %}<!DOCTYPE html>
+{% load static i18n %}
+<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}
 <html lang="{{ LANGUAGE_CODE }}">
   <head>
@@ -18,17 +19,11 @@
   <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
   {% block css %}
     <!-- Latest compiled and minified Bootstrap CSS -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"
-          integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA=="
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Montez&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" rel="stylesheet">
 <!-- Your stuff: Third-party CSS libraries go here -->
 <!-- This file stores project-specific CSS -->
-
-  
   <link href="{% static 'css/project.css' %}" rel="stylesheet" />
-
 
 {% endblock css %}
 <!-- Le javascript
@@ -36,69 +31,54 @@
 {# Placed at the top of the document so pages load faster with defer #}
 {% block javascript %}
 
-
-<!-- Bootstrap JS -->
-<script defer
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js"
-        integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"></script>
-<!-- Your stuff: Third-party javascript libraries go here -->
-
-
-<!-- place project specific Javascript in this file -->
-
-  
+<!-- JS -->
   <script defer src="{% static 'js/project.js' %}"></script>
-
 
 {% endblock javascript %}
 </head>
 <body class="{% block bodyclass %}{% endblock bodyclass %}">
   {% block body %}
-  <div class="mb-1">
-    <nav class="navbar navbar-expand-md navbar-light bg-light">
-      <div class="container-fluid">
-        <button class="navbar-toggler navbar-toggler-right"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="{% url 'home' %}">MangaLab</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'home' %}">Home <span class="visually-hidden">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'about' %}">About</a>
-            </li>
-            {% if request.user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link"
-                   href="{% url 'users:detail' request.user.pk %}">{% translate "My Profile" %}</a>
-              </li>
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a class="nav-link" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
-              </li>
-            {% else %}
-              {% if ACCOUNT_ALLOW_REGISTRATION %}
-                <li class="nav-item">
-                  {# URL provided by django-allauth/account/urls.py #}
-                  <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
-                </li>
-              {% endif %}
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
-              </li>
-            {% endif %}
-          </ul>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="{% url 'home' %}">
+          <img src="{% static 'images/logo/MangaLab.svg' %}" alt="MangaLab" width="212" height="38">
+        </a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item">Manga</a>
+          <a class="navbar-item">Anime</a>
+        </div>
+      </div>
+
+      <div class="navbar-end">
+        {% if request.user.is_authenticated %}
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">{{ request.user.first_name }}</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="{% url 'users:detail' request.user.pk %}">{% translate "My Profile" %}</a></a>
+            <a class="navbar-item is-selected">{% translate "Reading List" %}</a>
+            <a class="navbar-item">{% translate "Wachted List" %}</a>
+            <a class="navbar-item" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
+            <hr class="navbar-divider">
+            <a class="navbar-item">{% translate "Report an issue" %}</a>
+          </div>
+        {% else %}
+          {% if ACCOUNT_ALLOW_REGISTRATION %}
+            <div class="navbar-item">
+              <div class="buttons">
+                <a class="button is-primary" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
+          {% endif %}
+                <a class="button is-light"  href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
+        {% endif %}
+            </div>
+          </div>
         </div>
       </div>
     </nav>
@@ -106,12 +86,9 @@
   <div class="container">
     {% if messages %}
       {% for message in messages %}
-        <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+        <div class="notification {% if message.tags %}is-{{ message.tags }}{% endif %}">
           {{ message }}
-          <button type="button"
-                  class="btn-close"
-                  data-bs-dismiss="alert"
-                  aria-label="Close"></button>
+          <button class="delete" aria-label="Close"></button>
         </div>
       {% endfor %}
     {% endif %}
@@ -131,7 +108,7 @@
     Script tags with only code, no src (defer by default). To run
     with a "defer" so that you run inline code:
     <script>
-      window.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener('DOMContentLoaded', () => {
         /* Run whatever you want */
       });
     </script>
