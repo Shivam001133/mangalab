@@ -1,0 +1,11 @@
+{
+    "mangas": [
+        {
+            "domain_name": "manhwaz.com",
+            "domain_url": "https://manhwaz.com/",
+            "harvest_type": "manga",
+            "is_active": true
+        }
+    ],
+    "anime": []
+}
