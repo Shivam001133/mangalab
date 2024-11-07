@@ -1,7 +1,11 @@
 volumes:
-  manga_lab_local_postgres_data: {}
-  manga_lab_local_postgres_data_backups: {}
-  manga_lab_local_redis_data: {}
+  mangalab_local_postgres: {}
+  mangalab_local_postgres_backups: {}
+  mangalab_local_redis: {}
+
+networks:
+  elastic:
+    driver: bridge
 
 services:
   django: &django
@@ -21,6 +25,8 @@ services:
     ports:
       - '8000:8000'
     command: /start
+    networks:
+      - elastic
 
   postgres:
     build:
@@ -29,17 +35,21 @@ services:
     image: manga_lab_production_postgres
     container_name: mangalab_local_postgres
     volumes:
-      - manga_lab_local_postgres_data:/var/lib/postgresql/data
-      - manga_lab_local_postgres_data_backups:/backups
+      - mangalab_local_postgres:/var/lib/postgresql/data
+      - mangalab_local_postgres_backups:/backups
     env_file:
       - ./.envs/.local/.postgres
+    networks:
+      - elastic
 
   redis:
     image: docker.io/redis:6
     container_name: mangalab_local_redis
     
     volumes:
-      - manga_lab_local_redis_data:/data
+      - mangalab_local_redis:/data
+    networks:
+      - elastic
 
   celeryworker:
     <<: *django
@@ -50,6 +60,8 @@ services:
       - postgres
     ports: []
     command: /start-celeryworker
+    networks:
+      - elastic
 
   celerybeat:
     <<: *django
@@ -60,6 +72,8 @@ services:
       - postgres
     ports: []
     command: /start-celerybeat
+    networks:
+      - elastic
 
   flower:
     <<: *django
@@ -68,7 +82,9 @@ services:
     ports:
       - '5555:5555'
     command: /start-flower
-  
+    networks:
+      - elastic
+
   scrapy:
     <<: *django
     container_name: mangalab_local_scrapy
@@ -83,3 +99,5 @@ services:
         max-file: "3"
     ports:
       - '1515:8000'
+    networks:
+      - elastic

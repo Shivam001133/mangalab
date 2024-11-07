@@ -1,91 +1,169 @@
-{% extends "base.html" %} {% block meta_extend %} {% load static %}
+{% extends "base.html" %}
+{% block meta_extend %}
+{% load static %}
 <title>Free Power Tarot Reading: Power Tarot Card - InstaAstro</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<meta name="title" content="Free Power Tarot Reading: Power Tarot Card - InstaAstro" />
-<meta name="description" content="Feeling powerless, weak, or hopeless? then must try this Power Tarot Card Reading for Free, it will help you to know how to get back on track." />
-<meta name="keywords" content="life tarot card reading, past life tarot card meanings, power tarot card, power tarot card meaning, tarot cards, black power tarot guide, black power tarot, power tarot, energy reading free, tarot power card, power tarot card, power and light tarot, life tarot card reading, past life tarot card meanings, power tarot card, power tarot card meaning, luck tarot card reading free, free tarot reading" />
-<link rel="canonical" href="https://instaastro.com/tarot/power-life-reading/" />
-<script src="{% static 'js/jquery.min.js' %}"></script>
-    <style>
-        /* Carousel styling */
-        .carousel {
-        position: relative;
-        overflow: hidden;
-        width: 100%;
-        max-width: 600px;
-        margin: auto;
-        }
-        .carousel-item {
-        min-width: 100%;
-        transition: transform 0.5s ease;
-        }
-        .carousel-inner {
-        display: flex;
-        width: 100%;
-        }
-        /* Carousel control buttons */
-        .carousel-control {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: rgba(0, 0, 0, 0.5);
-        color: white;
-        padding: 10px;
-        cursor: pointer;
-        z-index: 1;
-        }
-        .carousel-control.left {
-        left: 10px;
-        }
-        .carousel-control.right {
-        right: 10px;
-        }
-    </style>
-{% endblock %} 
+<meta name="title" content="Free Manga Anime Web" />
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<script defer src="{% static 'js/home.js' %}"></script>
+<style>
+#slider {
+    max-width: 100%;
+    margin: auto;
+  }
+.carousel-item {
+    display: flex;
+  }
+.carousel-image {
+    width: 100%;
+  }
+.carousel-content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+  }
+.image-container {
+    position: relative;
+}
 
-{% block content %}
-    <div class="carousel">
-    <div class="carousel-inner">
-        <div class="carousel-item has-background-primary">
-        <div class="content has-text-centered">
-            <h2 class="title is-3 has-text-white">Slide 1</h2>
-        </div>
-        </div>
-        <div class="carousel-item has-background-link">
-        <div class="content has-text-centered">
-            <h2 class="title is-3 has-text-white">Slide 2</h2>
-        </div>
-        </div>
-        <div class="carousel-item has-background-danger">
-        <div class="content has-text-centered">
-            <h2 class="title is-3 has-text-white">Slide 3</h2>
-        </div>
-        </div>
-    </div>
-    <!-- Carousel controls -->
-    <div class="carousel-control left" onclick="prevSlide()">&#10094;</div>
-    <div class="carousel-control right" onclick="nextSlide()">&#10095;</div>
-    </div>
+.overlay {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 2px 5px;
+    font-size: 0.8em;
+    border-radius: 3px;
+}
 
-    <script>
-    let currentIndex = 0;
-    const items = document.querySelectorAll('.carousel-item');
-
-    function updateCarousel() {
-        items.forEach((item, index) => {
-            item.style.transform = `translateX(-${currentIndex * 100}%)`;
-            });
-        }
-        
-        function nextSlide() {
-            currentIndex = (currentIndex + 1) % items.length;
-            updateCarousel();
-        }
-        
-        function prevSlide() {
-            currentIndex = (currentIndex - 1 + items.length) % items.length;
-            updateCarousel();
-        }
-    </script>
+</style>
 {% endblock %}
 
+{% block content %}
+<div class="container is-fluid">
+    <div id="slider">
+        <div class="card carousel-item">
+        <div class="carousel-image">
+            <figure class="image is-16by9">
+            <img src="https://source.unsplash.com/random/1200x500" alt="Slide 1" />
+            </figure>
+        </div>
+        <div class="carousel-content">
+            <div class="content box">
+            <p class="is-size-5">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium cum blanditiis dolore
+                aperiam reiciendis minima doloremque recusandae atque illum. Dolorum impedit aut facere,
+                porro minus quia dignissimos minima. Iure, magni?
+            </p>
+            </div>
+        </div>
+        </div>
+        
+        <div class="card carousel-item">
+        <div class="carousel-image">
+            <figure class="image is-16by9">
+            <img src="https://source.unsplash.com/random/1200x500" alt="Slide 2" />
+            </figure>
+        </div>
+        <div class="carousel-content">
+            <div class="content box">
+            <p class="is-size-5">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque facere inventore voluptate
+                ad, ipsam, esse asperiores distinctio ipsum reprehenderit nostrum veniam debitis perferendis
+                vero repellat earum commodi quaerat qui excepturi.
+            </p>
+            </div>
+        </div>
+        </div>
+        
+        <div class="card carousel-item">
+        <div class="carousel-image">
+            <figure class="image is-16by9">
+            <img src="https://source.unsplash.com/random/1300x500" alt="Slide 3" />
+            </figure>
+        </div>
+        <div class="carousel-content">
+            <div class="content box">
+            <p class="is-size-5">
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam magni sint exercitationem
+                libero nesciunt quo saepe, voluptates eaque. Iure itaque quam facere sit praesentium minus
+                deserunt tenetur nemo assumenda asperiores?
+            </p>
+            </div>
+        </div>
+        </div>
+    </div>
+        <p class="title is-2 pl-6 mt-6 is-spaced">Latest Manga</p>
+        <hr class="is-divider">
+        <div class="columns is-mobile is-multiline is-centered">
+            <div class="column is-narrow">
+              <div class="box">
+                <div class="image-container">
+                  <figure class="image">
+                    <img src="path/to/your-image.jpg" alt="Image">
+                    <div class="overlay">ch 2</div>
+                  </figure>
+                </div>
+                <p class="title is-5">Title goes here</p>
+              </div>
+            </div>
+            <div class="column is-narrow">
+                <div class="box">
+                  <div class="image-container">
+                    <figure class="image">
+                      <img src="path/to/your-image.jpg" alt="Image">
+                      <div class="overlay">ch 2</div>
+                    </figure>
+                  </div>
+                  <p class="title is-5">Title goes here</p>
+                </div>
+              </div>
+              <div class="column is-narrow">
+                <div class="box">
+                  <div class="image-container">
+                    <figure class="image">
+                      <img src="path/to/your-image.jpg" alt="Image">
+                      <div class="overlay">ch 2</div>
+                    </figure>
+                  </div>
+                  <p class="title is-5">Title goes here</p>
+                </div>
+              </div>
+              <div class="column is-narrow">
+                <div class="box">
+                  <div class="image-container">
+                    <figure class="image">
+                      <img src="path/to/your-image.jpg" alt="Image">
+                      <div class="overlay">ch 2</div>
+                    </figure>
+                  </div>
+                  <p class="title is-5">Title goes here</p>
+                </div>
+              </div>
+              <div class="column is-narrow">
+                <div class="box">
+                  <div class="image-container">
+                    <figure class="image">
+                      <img src="path/to/your-image.jpg" alt="Image">
+                      <div class="overlay">ch 2</div>
+                    </figure>
+                  </div>
+                  <p class="title is-5">Title goes here</p>
+                </div>
+              </div>
+          </div>
+          
+
+<script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+<script>
+  bulmaCarousel.attach('#slider', {
+    slidesToScroll: 1,
+    slidesToShow: 1,
+    infinite: true,
+    autoplay: true,
+    autoplaySpeed: 3000  // 10 seconds
+  });
+</script>  
+{% endblock %}
