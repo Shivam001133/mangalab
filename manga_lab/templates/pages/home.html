@@ -1,3 +1,91 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block meta_extend %} {% load static %}
+<title>Free Power Tarot Reading: Power Tarot Card - InstaAstro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="title" content="Free Power Tarot Reading: Power Tarot Card - InstaAstro" />
+<meta name="description" content="Feeling powerless, weak, or hopeless? then must try this Power Tarot Card Reading for Free, it will help you to know how to get back on track." />
+<meta name="keywords" content="life tarot card reading, past life tarot card meanings, power tarot card, power tarot card meaning, tarot cards, black power tarot guide, black power tarot, power tarot, energy reading free, tarot power card, power tarot card, power and light tarot, life tarot card reading, past life tarot card meanings, power tarot card, power tarot card meaning, luck tarot card reading free, free tarot reading" />
+<link rel="canonical" href="https://instaastro.com/tarot/power-life-reading/" />
+<script src="{% static 'js/jquery.min.js' %}"></script>
+    <style>
+        /* Carousel styling */
+        .carousel {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        max-width: 600px;
+        margin: auto;
+        }
+        .carousel-item {
+        min-width: 100%;
+        transition: transform 0.5s ease;
+        }
+        .carousel-inner {
+        display: flex;
+        width: 100%;
+        }
+        /* Carousel control buttons */
+        .carousel-control {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 10px;
+        cursor: pointer;
+        z-index: 1;
+        }
+        .carousel-control.left {
+        left: 10px;
+        }
+        .carousel-control.right {
+        right: 10px;
+        }
+    </style>
+{% endblock %} 
 
+{% block content %}
+    <div class="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item has-background-primary">
+        <div class="content has-text-centered">
+            <h2 class="title is-3 has-text-white">Slide 1</h2>
+        </div>
+        </div>
+        <div class="carousel-item has-background-link">
+        <div class="content has-text-centered">
+            <h2 class="title is-3 has-text-white">Slide 2</h2>
+        </div>
+        </div>
+        <div class="carousel-item has-background-danger">
+        <div class="content has-text-centered">
+            <h2 class="title is-3 has-text-white">Slide 3</h2>
+        </div>
+        </div>
+    </div>
+    <!-- Carousel controls -->
+    <div class="carousel-control left" onclick="prevSlide()">&#10094;</div>
+    <div class="carousel-control right" onclick="nextSlide()">&#10095;</div>
+    </div>
+
+    <script>
+    let currentIndex = 0;
+    const items = document.querySelectorAll('.carousel-item');
+
+    function updateCarousel() {
+        items.forEach((item, index) => {
+            item.style.transform = `translateX(-${currentIndex * 100}%)`;
+            });
+        }
+        
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % items.length;
+            updateCarousel();
+        }
+        
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + items.length) % items.length;
+            updateCarousel();
+        }
+    </script>
+{% endblock %}
 

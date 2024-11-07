@@ -1,0 +1,46 @@
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="{% url 'home' %}">
+        <img src="{% static 'images/logo/MangaLab.svg' %}" alt="MangaLab" width="212" height="38">
+      </a>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item">Manga</a>
+        <a class="navbar-item" href="{% url 'about' %}">Anime</a>
+      </div>
+    </div>
+
+    <div class="navbar-end">
+      {% if request.user.is_authenticated %}
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">{{ request.user.first_name }}</a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="{% url 'users:detail' request.user.pk %}">{% translate "My Profile" %}</a>
+          <a class="navbar-item is-selected">{% translate "Reading List" %}</a>
+          <a class="navbar-item">{% translate "Wachted List" %}</a>
+          <a class="navbar-item" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
+          <hr class="navbar-divider">
+          <a class="navbar-item">{% translate "Report an issue" %}</a>
+        </div>
+      {% else %}
+        {% if ACCOUNT_ALLOW_REGISTRATION %}
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-primary" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
+        {% endif %}
+              <a class="button is-light"  href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
+      {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
