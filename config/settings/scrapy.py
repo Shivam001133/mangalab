@@ -18,9 +18,12 @@ DOWNLOAD_HANDLERS = {
     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
 }
 PLAYWRIGHT_BROWSER_TYPE = "firefox"
+PLAYWRIGHT_DEFAULT_NAVIGATION_TIMEOUT = 60000 # 60 seconds
 PLAYWRIGHT_LAUNCH_OPTIONS = {
     "headless": True,
-    "timeout": 20 * 1000,  # 20 seconds
+    "timeout": 20 * 1000,  # 20 secondss
+    # Bypass bot detection
+    "args": ["--disable-blink-features=AutomationControlled"],
 }
 PLAYWRIGHT_CDP_URL = "http://localhost:9222"
 
@@ -92,7 +95,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "harvest.pipelines.HarvestPipeline": 300,
+    "harvest.pipelines.MangaVaultPipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -120,9 +123,3 @@ AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
-
-# logs settings
-LOG_LEVEL = "INFO"  # or 'DEBUG' for more detailed logs
-LOG_STDOUT = True  # Redirect stdout to Scrapy's log
-LOG_FORMAT = "%(levelname)s: %(message)s"
-LOG_FILE = "/app/logs/scrapy.log"

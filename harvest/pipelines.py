@@ -8,7 +8,7 @@
 from itemadapter import ItemAdapter  # noqa:F401
 
 
-class HarvestPipeline:
+class MangaVaultPipeline:
     def process_item(self, item, spider):
         item.save()
         return item

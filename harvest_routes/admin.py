@@ -1,5 +1,6 @@
 from django.contrib import admin
-from harvest_routes.models import Harvester, ScrapingHarvest
+from harvest_routes.models import (
+    Harvester, ScrapingHarvest, MangasLogs, ChaptersLogs)
 
 
 @admin.register(Harvester)
@@ -31,8 +32,15 @@ class ScrapingHarvestAdmin(admin.ModelAdmin):
                 "fields": (
                     "manga_list",
                     "manga_title",
+                    "manga_genre_list",
+                    "manga_genre",
+                    "description_list",
+                    "description",
+                    "re_title",
                     "manga_url",
+                    "re_url",
                     "manga_cover_img",
+                    "re_cover_img",
                 )
             },
         ),
@@ -42,9 +50,15 @@ class ScrapingHarvestAdmin(admin.ModelAdmin):
                 "fields": (
                     "chapter_list",
                     "chapter_title",
+                    "re_chapter_title",
                     "chapter_url",
+                    "re_chapter_url",
                 )
             },
+        ),
+        (
+            "Configuration",
+            {"fields": ("payload",)},
         ),
         (
             "Infomations",
@@ -65,3 +79,23 @@ class ScrapingHarvestAdmin(admin.ModelAdmin):
         "harvest",
         "is_active",
     )
+
+
+@admin.register(MangasLogs)
+class MangasLogsAdmin(admin.ModelAdmin):
+    list_display = ("variable", "is_active", "updated_at")
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+    list_filter = ("is_active",)
+
+
+@admin.register(ChaptersLogs)
+class ChaptersLogsAdmin(admin.ModelAdmin):
+    list_display = ("variable", "is_active", "updated_at")
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+    list_filter = ("is_active",)

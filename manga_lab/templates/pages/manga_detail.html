@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+{% block meta_extend %}
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
+<title>{% block title %} MangaLab {% endblock title %} </title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="This is scraping project for manga lab" />
+<meta name="author" content="Shivam Pandey" />
+<link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <!-- Left Panel -->
+        <div class="col-md-4 text-center">
+            <div class="mb-3">
+                <img 
+                    class="img-fluid img-thumbnail" 
+                    src="{{ manga.cover_img }}" 
+                    alt="{{ manga.title }}" 
+                    title="{{ manga.title }}" 
+                    onerror="this.src=''"
+                >
+            </div>
+            <button class="btn btn-primary w-100">READ CHAPTER LIST</button>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="col-md-8">
+            <h1 class="mb-3">{{ manga.title }}</h1>
+
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Alternative</th>
+                        <td>{{ manga.manga_title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Author(s)</th>
+                        <td>{{ authors|default:'Unknown' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>{{ manga.status|default:'Unknown' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Genres</th>
+                        <td>
+                            {% for genre_ in manga.genre.all %}
+                                <a href="{{ genre.url }}" class="badge bg-secondary">{{ genre_.title }}</a>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div>
+                <p><strong>Updated:</strong> {{ updated|default:'Unknown' }}</p>
+                <p><strong>Views:</strong> {{ views|default:'0' }}</p>
+                <p>
+                    <strong>Rating:</strong> 
+                    <span>({{ rating|default:'0' }}/5)</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Description -->
+    <div class="mt-4">
+        <h3>Description:</h3>
+        <p>{{ manga.description|truncatechars:200 }}</p>
+        <button class="btn btn-link" id="show-more-btn">SHOW MORE</button>
+    </div>
+</div>
+
+<div class="container panel-story-chapter-list">
+    <!-- Header Section -->
+    <div class="row bg-primary text-white py-2">
+        <div class="col-md-6"><strong>Chapter Name</strong></div>
+        <div class="col-md-3 text-center"><strong>Views</strong></div>
+        <div class="col-md-3 text-end"><strong>Uploaded</strong></div>
+    </div>
+
+    <!-- Chapter List -->
+    <ul class="list-group">
+        {% for chapter in chapters %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <!-- Chapter Name -->
+            <a href="{{ chapter.url }}" 
+               class="text-decoration-none flex-grow-1" 
+               title="{{ chapter.title }}">
+                {{ chapter.chapter_title }}
+            </a>
+
+            <!-- Chapter Views -->
+            <span class="text-nowrap mx-3">{{ chapter.pk }}</span>
+
+            <!-- Upload Time -->
+            <span class="text-muted text-nowrap" title="{{ chapter.upload_time }}">
+                {{ chapter.created_at }}
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script>
+    document.getElementById('show-more-btn').addEventListener('click', function() {
+        var description = document.querySelector('.mt-4 p');
+        if (description.style.whiteSpace === 'normal') {
+            description.style.whiteSpace = 'nowrap';
+            this.textContent = 'SHOW MORE';
+        } else {
+            description.style.whiteSpace = 'normal';
+            this.textContent = 'SHOW LESS';
+        }
+    });
+</script>
+{% endblock content %}

@@ -19,11 +19,11 @@
 
 {% block content %}
 <div id="carouselExampleIndicators" class="carousel slide carousel-fade">
-    <ol class="carousel-indicators">
+    <div class="carousel-indicators">
       {% for data in banner %}
-        <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+        <div data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></div>
       {% endfor %}
-    </ol>
+    </div>
     
     <div class="carousel-inner">
       {% for data in banner %}
@@ -42,19 +42,22 @@
       <span class="visually-hidden">Next</span>
     </a>
 </div>
+
 <div class="container">
+  <h3 class="h3">Manga List </h3>
+  <hr class="hr">
   <div class="row">
     {% for item in data %}
     <div class="col-md-3 mb-4">
       <div class="item-thumb hover-details c-image-hover">
-        <a href="{{ item.url }}" title="{{ item.title }}">
-          <img width="175" height="238" class="img-responsive" src="{{ item.img_url }}" title="{{ item.title }}" alt="{{ item.slanged_title }}">
+        <a href="{% url 'mangavault:manga_detail' item.id %}" title="{{ item.title }}">
+          <img width="175" height="238" class="img-responsive" src="{{ item.cover_img }}" title="{{ item.description }}" alt="{{ item.slanged_title }}">
         </a>
       </div>
       <div class="item-summary">
         <div class="post-title font-title">
-          <h3 class="line-2 pt-2">
-            <a href="{{ item.url }}">{{ item.title }}</a>
+          <h3 class="h2 pt-2">
+            <a href="{% url 'mangavault:manga_detail' item.id %}">{{ item.title }}</a>
           </h3>
         </div>
         <div class="list-chapter">

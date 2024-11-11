@@ -26,7 +26,7 @@ urlpatterns = [
     # User management
     path("users/", include("manga_lab.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-    # path("mangavault/", include("mangavault.urls", namespace="mangavault")),
+    path("mangavault/", include("mangavault.urls", namespace="mangavault")),
     # Your stuff: custom urls includes go here
     # ...
     # Media files
