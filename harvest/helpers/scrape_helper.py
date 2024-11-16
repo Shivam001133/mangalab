@@ -7,9 +7,7 @@ def scraping_info(domain_name):
     This function is used to scrape the domain
     """
     domain = Harvester.objects.get(domain_name=domain_name)
-    return ScrapingHarvest.objects.filter(
-        is_active=True, harvest=domain
-    ).first()
+    return ScrapingHarvest.objects.filter(is_active=True, harvest=domain).first()
 
 
 def extract_chapter_no(chapter_title):

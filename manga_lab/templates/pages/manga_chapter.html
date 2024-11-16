@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'path/to/ionicons.min.css' %}">
+{% block meta_extend %}
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
+<title>{% block title %} MangaLab {% endblock title %} </title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="This is scraping project for manga lab" />
+<meta name="author" content="Shivam Pandey" />
+<link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+{% endblock %}
+chapter_detail
+{% block content %}
+<div class="container text-center my-4">
+    <h1>{{ manga_title }}</h1>
+</div>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <a href="{% url 'home' %}" class="btn btn-primary">
+            <i class="ion-home"></i> Home
+        </a>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select Chapter
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {% for chapter_ in chapters %}
+                <a class="dropdown-item" href="{% url 'mangavault:read_chapter' chapter_.id %}">{{ chapter_.title }}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if next_chapter %}
+            <a href="{% url 'mangavault:read_chapter' next_chapter.id %}" class="btn btn-success">
+                Next Chapter <i class="ion-arrow-right-c"></i>
+            </a>
+        {% else %}
+            <button class="btn btn-success" disabled>
+                Next Chapter <i class="ion-arrow-right-c"></i>
+            </button>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            {% for img in chapter_url %}
+            <img src="{{ img }}" class="img-fluid" alt="Manga Image">
+            {% endfor %}
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+{% endblock content %}

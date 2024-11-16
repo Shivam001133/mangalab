@@ -18,9 +18,7 @@ def get_domain_info(domain_name: str) -> models:
     try:
         return Harvester.objects.get(domain_name=domain_name, is_active=True)
     except Harvester.DoesNotExist:
-        logger.exception(
-            logging_message.MODELS_NOT_FOUND.format(MESSAGE=domain_name)
-        )
+        logger.exception(logging_message.MODELS_NOT_FOUND.format(MESSAGE=domain_name))
         return None
 
 
@@ -35,9 +33,12 @@ def save_manga_to_db(manga_data, genre=None, status=None) -> None:
         genre = genre_mapper(genre)
     if status:
         status_list = [
-            MangaStatus.ONGOING, MangaStatus.COMPLETED,
-            MangaStatus.PAUSED, MangaStatus.CANCELLED,
-            MangaStatus.NONE]
+            MangaStatus.ONGOING,
+            MangaStatus.COMPLETED,
+            MangaStatus.PAUSED,
+            MangaStatus.CANCELLED,
+            MangaStatus.NONE,
+        ]
         for _status in status_list:
             if status == _status:
                 status = _status
@@ -49,9 +50,7 @@ def save_manga_to_db(manga_data, genre=None, status=None) -> None:
                 _save_or_log_manga(manga)
         elif isinstance(manga_data, dict):
             manga_data["status"] = status
-            obj = _save_or_log_manga(manga_data, genre)
-            print("****"*10, obj)
-            return obj
+            return _save_or_log_manga(manga_data, genre)
     return None
 
 
@@ -67,11 +66,7 @@ def _save_or_log_manga(manga, genre) -> None:
             logger.info(f"Existing entry found: {obj}")
             return obj
     except IntegrityError as err:
-        MangasLogs.objects.create(
-            variable=manga,
-            error_log=err,
-            is_active=True
-        )
+        MangasLogs.objects.create(variable=manga, error_log=err, is_active=True)
         return None
 
 
@@ -94,11 +89,7 @@ def _save_or_log_chapter(chapter) -> None:
         else:
             logger.info(f"Existing chapter entry found: {obj}")
     except IntegrityError as err:
-        ChaptersLogs.objects.create(
-            variable=chapter,
-            error_log=err,
-            is_active=True
-        )
+        ChaptersLogs.objects.create(variable=chapter, error_log=err, is_active=True)
 
 
 def genre_mapper(genre_list: list):

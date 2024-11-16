@@ -1,3 +1,38 @@
 {% extends "base.html" %}
-
+{% load static %}
+{% block meta_extend %}
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
+<title>{% block title %} MangaLab {% endblock title %} </title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="author" content="Shivam Pandey" />
+<link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+{% endblock %}
+{% block content %}
+<section class="py-5 bg-dark text-white">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="text-center">
+            <h1 class="display-6 text-uppercase text-muted mb-3">Manga Lab</h1>
+            <h2 class="display-5 fw-bold mb-4">About Us</h2>
+            <p class="lead">
+              Growing up, I was deeply passionate about manga and anime, spending countless hours immersed in their worlds. During my teenage years, this love became a constant companion and a source of inspiration.
+            </p>
+            <p class="lead">
+              As I ventured into the world of web development, I dreamed of creating a space where fans like me could enjoy manga and anime in one place. This website is the result of that passion—a labor of love built and managed entirely by me.
+            </p>
+            <p class="lead">
+              The content on this platform is gathered through automated scraping from various sources. <span class="fw-light fst-italic">If you represent a website and would like your content removed,</span> I sincerely apologize for any inconvenience caused. Please reach out to me, and I'll ensure its removal. Kindly allow up to a week for the process. Your patience and understanding are greatly appreciated.
+            </p>
+            <p class="lead">
+              Thank you for supporting this project and sharing in the love for manga and anime!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+{% endblock content %}
 

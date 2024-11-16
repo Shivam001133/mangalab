@@ -1,6 +1,5 @@
 from django.contrib import admin
-from harvest_routes.models import (
-    Harvester, ScrapingHarvest, MangasLogs, ChaptersLogs)
+from harvest_routes.models import Harvester, ScrapingHarvest, MangasLogs, ChaptersLogs
 
 
 @admin.register(Harvester)
@@ -32,15 +31,11 @@ class ScrapingHarvestAdmin(admin.ModelAdmin):
                 "fields": (
                     "manga_list",
                     "manga_title",
-                    "manga_genre_list",
                     "manga_genre",
-                    "description_list",
                     "description",
-                    "re_title",
                     "manga_url",
-                    "re_url",
                     "manga_cover_img",
-                    "re_cover_img",
+                    "manga_payload",
                 )
             },
         ),
@@ -50,9 +45,9 @@ class ScrapingHarvestAdmin(admin.ModelAdmin):
                 "fields": (
                     "chapter_list",
                     "chapter_title",
-                    "re_chapter_title",
                     "chapter_url",
-                    "re_chapter_url",
+                    "chapter_content",
+                    "chapter_payload",
                 )
             },
         ),

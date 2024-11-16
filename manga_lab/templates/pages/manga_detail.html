@@ -86,7 +86,7 @@
         {% for chapter in chapters %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
             <!-- Chapter Name -->
-            <a href="{{ chapter.url }}" 
+            <a href="{% url 'mangavault:read_chapter' chapter.id %}"
                class="text-decoration-none flex-grow-1" 
                title="{{ chapter.title }}">
                 {{ chapter.chapter_title }}

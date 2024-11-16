@@ -30,21 +30,17 @@ class ScrapingHarvest(models.Model):
     # manga information
     manga_list = models.TextField(default=dict)
     manga_title = models.CharField(max_length=150)
-    manga_genre_list = models.TextField(default=dict)
     manga_genre = models.CharField(max_length=50)
-    description_list = models.TextField(default=dict)
     description = models.CharField(max_length=250)
-    re_title = models.TextField(default=dict)
     manga_url = models.CharField(max_length=250)
-    re_url = models.TextField(default=dict)
     manga_cover_img = models.CharField(max_length=250)
-    re_cover_img = models.TextField(default=dict)
+    manga_payload = models.JSONField(default=dict)
     # chapter information
-    chapter_list = models.TextField(default=list)
+    chapter_list = models.JSONField(default=dict)
     chapter_title = models.CharField(max_length=250)
-    re_chapter_title = models.TextField(default=dict)
     chapter_url = models.CharField(max_length=250)
-    re_chapter_url = models.TextField(default=dict)
+    chapter_content = models.CharField(max_length=250)
+    chapter_payload = models.JSONField(default=dict)
     # Configuration
     payload = models.TextField(default=dict)
 

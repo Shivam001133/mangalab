@@ -9,10 +9,10 @@ from harvest.helpers.model_helpers import (
     save_chapter_to_db,
 )
 from scrapy_playwright.page import PageCoroutine
-from harvest.helpers.scrape_helper import (
-    extract_chapter_no, extract_manga_title)
+from harvest.helpers.scrape_helper import extract_chapter_no, extract_manga_title
 
 logger = logging.getLogger(__name__)
+
 
 class DomainSpider(scrapy.Spider):
     name = "domain_spider"
@@ -51,10 +51,10 @@ class DomainSpider(scrapy.Spider):
     async def parse(self, response):
         page = response.meta["playwright_page"]
         await self._perform_scrolling(page)
-
         manga_list_items = json.loads(self.scraping_harvest.manga_list)
-        cover_img_selectors = json.loads(
-            self.scraping_harvest.re_cover_img).get("re_cover_img", [])
+        cover_img_selectors = self.scraping_harvest.manga_payload.get(
+            "re_cover_img", []
+        )
         for manga_list_item in manga_list_items.get("list"):
             manga_items = response.css(manga_list_item)
             for manga in manga_items:
@@ -63,7 +63,8 @@ class DomainSpider(scrapy.Spider):
                 vault_url = manga.css(self.scraping_harvest.manga_url).get()
 
                 cover_img = await self._get_cover_image(
-                    page, manga, cover_img_selectors)
+                    page, manga, cover_img_selectors
+                )
 
                 mangavault_data = {
                     "website": self.harvest_domain,
@@ -95,7 +96,7 @@ class DomainSpider(scrapy.Spider):
     async def _get_cover_image(self, page, manga, selectors):
         """Tries to retrieve cover image based on multiple selectors."""
         for img_path in selectors:
-            await page.wait_for_selector(img_path.strip(), timeout=500)
+            await page.wait_for_selector(img_path.strip(), timeout=10000)
             cover_img = manga.css(self.scraping_harvest.manga_cover_img).get()
             if cover_img:
                 return cover_img
@@ -106,52 +107,76 @@ class DomainSpider(scrapy.Spider):
         mangavault_data = response.meta.get("mangavault_data")
         await self._perform_scrolling(page)
 
-        chapter_list = json.loads(self.scraping_harvest.chapter_list)
         manga_description = response.css(self.scraping_harvest.description).get()
-
-        if not mangavault_data["cover_img"]:
-            cover_img = response.css(json.loads(
-                self.scraping_harvest.re_cover_img).get("detail_img")).get()
+        if not mangavault_data.get("cover_img", None):
+            cover_img = response.css(
+                self.scraping_harvest.manga_payload.get("detail_img")
+            ).get()
             mangavault_data["cover_img"] = cover_img
 
         if manga_description:
             mangavault_data["description"] = manga_description
 
-        genre_scrape = json.loads(self.scraping_harvest.manga_genre_list)
-        for items in (response.css(genre_scrape.get("status_list"))):
-            heading = (items.css(genre_scrape.get("status_heading")).get()
-                       ).strip().lower()
-            if  heading == "status":
+        genre_scrape = self.scraping_harvest.manga_payload
+        for items in response.css(genre_scrape.get("status_list")):
+            heading = (
+                (items.css(genre_scrape.get("status_heading")).get()).strip().lower()
+            )
+            if heading == "status":
                 status = items.css(genre_scrape.get("status")).get().strip().lower()
             if "genre" in heading:
                 genre_list = [
-                    (genre.css(self.scraping_harvest.manga_genre).get()
-                     ).strip().capitalize()
+                    (genre.css(self.scraping_harvest.manga_genre).get())
+                    .strip()
+                    .capitalize()
                     for genre in items.css(genre_scrape.get("list"))
                 ]
 
         # Save manga and chapter data to the database
         manga_obj = await sync_to_async(save_manga_to_db)(
-            mangavault_data, genre=genre_list, status=status)
-        print("############"*10, manga_obj)
-        # logger.info(f"Manga data: {mangavault_data} saved")
+            mangavault_data, genre=genre_list, status=status
+        )
+        logger.info(f"Manga data: {mangavault_data} saved")
 
-        chapters = []
-        for chapter in response.css(chapter_list.get("chapter_list")):
+        for chapter in response.css(
+            self.scraping_harvest.chapter_list.get("chapter_list")
+        ):
             chapter_title = chapter.css(self.scraping_harvest.chapter_title).get()
             chapter_url = chapter.css(self.scraping_harvest.chapter_url).get()
 
-            chapters.append({
+            chapter_data = {
                 "chapter_title": chapter_title,
                 "manga": manga_obj,
                 "chapter_url": chapter_url,
                 "chapter_number": extract_chapter_no(chapter_title),
-            })
+            }
+            yield response.follow(
+                chapter_url,
+                meta={
+                    "chapter_data": chapter_data,
+                    "playwright": True,
+                    "playwright_include_page": True,
+                    "playwright_page_coroutines": self._scroll_actions(),
+                    "errback": self.errback,
+                },
+                callback=self.parse_chapter_content,
+            )
         await page.close()
 
-        for chapter_data in chapters:
-            await sync_to_async(save_chapter_to_db)(chapter_data)
-            logger.info(f"Chapter data: {chapter_data} saved")
+    async def parse_chapter_content(self, response):
+        page = response.meta["playwright_page"]
+        chapter_data = response.meta.get("chapter_data")
+        chapter_content = response.css(
+            self.scraping_harvest.chapter_payload.get("content_list")
+        )
+        img_list = []
+        for content_img in chapter_content:
+            img = content_img.css(self.scraping_harvest.chapter_content).get()
+            img_list.append(img)
+        chapter_data["chapter_list"] = img_list
+        await sync_to_async(save_chapter_to_db)(chapter_data)
+        logger.info(f"Chapter data: {chapter_data} saved")
+        await page.close()
 
     async def errback(self, failure):
         page = failure.request.meta["playwright_page"]
