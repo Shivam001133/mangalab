@@ -1,118 +1,139 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block meta_extend %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
-<title>{% block title %} MangaLab {% endblock title %} </title>
+<title>{% block title %}MangaLab{% endblock title %}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="This is scraping project for manga lab" />
+<meta name="description" content="This is a scraping project for MangaLab" />
 <meta name="author" content="Shivam Pandey" />
 <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
-{% endblock %}
+{% endblock meta_extend %}
+
 {% block content %}
 <div class="container py-4">
-    <div class="row">
-        <!-- Left Panel -->
-        <div class="col-md-4 text-center">
-            <div class="mb-3">
-                <img 
-                    class="img-fluid img-thumbnail" 
-                    src="{{ manga.cover_img }}" 
-                    alt="{{ manga.title }}" 
-                    title="{{ manga.title }}" 
-                    onerror="this.src=''"
-                >
+    <div class="container mx-5 px-5">
+        <div class="row">
+            <!-- Left Panel -->
+            <div class="col-md-4 text-center">
+                <div class="mb-3">
+                    <img
+                        class="img-fluid img-thumbnail"
+                        src="{{ manga.cover_img }}"
+                        alt="{{ manga.title }}"
+                        title="{{ manga.title }}"
+                        onerror="this.src=''"
+                    />
+                </div>
+                <button class="btn w-100" style="background-color: #6351ce; color: white;">
+                    READ CHAPTER LIST
+                </button>
             </div>
-            <button class="btn btn-primary w-100">READ CHAPTER LIST</button>
-        </div>
 
-        <!-- Right Panel -->
-        <div class="col-md-8">
-            <h1 class="mb-3">{{ manga.title }}</h1>
+            <!-- Right Panel -->
+            <div class="col-md-8">
+                <h1 class="mb-3">{{ manga.title }}</h1>
+                <div class="container my-4">
+                    <!-- Alternative Titles -->
+                    <div class="row mb-3">
+                        <div class="col-md-3 font-weight-bold">Alternative(s):</div>
+                        <div class="col-md-9">{{ manga.manga_title }}</div>
+                    </div>
 
-            <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <th>Alternative</th>
-                        <td>{{ manga.manga_title }}</td>
-                    </tr>
-                    <tr>
-                        <th>Author(s)</th>
-                        <td>{{ authors|default:'Unknown' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Status</th>
-                        <td>{{ manga.status|default:'Unknown' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Genres</th>
-                        <td>
+                    <!-- Authors -->
+                    <div class="row mb-3">
+                        <div class="col-md-3 font-weight-bold">Author(s):</div>
+                        <div class="col-md-9">{{ authors|default:"Unknown" }}</div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="row mb-3">
+                        <div class="col-md-3 font-weight-bold">Status:</div>
+                        <div class="col-md-9">{{ manga.status|default:"Unknown" }}</div>
+                    </div>
+
+                    <!-- Genres -->
+                    <div class="row mb-3">
+                        <div class="col-md-3 font-weight-bold">Genres:</div>
+                        <div class="col-md-9">
                             {% for genre_ in manga.genre.all %}
-                                <a href="{{ genre.url }}" class="badge bg-secondary">{{ genre_.title }}</a>
+                            <a href="{{ genre_.url }}" class="badge text-light" style="background-color: #6351ce; margin-right: 5px;">
+                                {{ genre_.title }}
+                            </a>
+                            {% empty %}
+                            <span>No genres available</span>
                             {% endfor %}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                        </div>
+                    </div>
 
-            <div>
-                <p><strong>Updated:</strong> {{ updated|default:'Unknown' }}</p>
-                <p><strong>Views:</strong> {{ views|default:'0' }}</p>
-                <p>
-                    <strong>Rating:</strong> 
-                    <span>({{ rating|default:'0' }}/5)</span>
-                </p>
+                    <!-- Updated -->
+                    <div class="row mb-3">
+                        <div class="col-md-3 font-weight-bold">Updated:</div>
+                        <div class="col-md-9">{{ updated|default:"Unknown" }}</div>
+                    </div>
+
+                    <!-- Views -->
+                    <div class="row mb-3">
+                        <div class="col-md-3 font-weight-bold">Views:</div>
+                        <div class="col-md-9">{{ views|default:"0" }}</div>
+                    </div>
+
+                    <!-- Rating -->
+                    <div class="row mb-3">
+                        <div class="col-md-3 font-weight-bold">Rating:</div>
+                        <div class="col-md-9">
+                            <span>({{ rating|default:"0" }}/5)</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Description -->
-    <div class="mt-4">
-        <h3>Description:</h3>
-        <p>{{ manga.description|truncatechars:200 }}</p>
-        <button class="btn btn-link" id="show-more-btn">SHOW MORE</button>
-    </div>
-</div>
-
-<div class="container panel-story-chapter-list">
-    <!-- Header Section -->
-    <div class="row bg-primary text-white py-2">
-        <div class="col-md-6"><strong>Chapter Name</strong></div>
-        <div class="col-md-3 text-center"><strong>Views</strong></div>
-        <div class="col-md-3 text-end"><strong>Uploaded</strong></div>
+        <!-- Description -->
+        <div class="mt-4 py-2 ">
+            <h3>Description:</h3>
+            <p class="text-truncate mx-4 px-4" style="max-width: 100%;">{{ manga.description|truncatechars:200 }}</p>
+            <button class="btn btn-link" style="color: #6351ce; text-decoration: none; font-style: italic;" id="show-more-btn">
+                SHOW MORE
+            </button>
+        </div>
     </div>
 
     <!-- Chapter List -->
-    <ul class="list-group">
-        {% for chapter in chapters %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <!-- Chapter Name -->
-            <a href="{% url 'mangavault:read_chapter' chapter.id %}"
-               class="text-decoration-none flex-grow-1" 
-               title="{{ chapter.title }}">
-                {{ chapter.chapter_title }}
-            </a>
+    <div class="container panel-story-chapter-list">
+        <!-- Header Section -->
+        <div class="row text-light py-2" style="background-color: #6351ce;">
+            <div class="col-md-6"><strong>Chapter Name</strong></div>
+            <div class="col-md-3 text-center"><strong>Views</strong></div>
+            <div class="col-md-3 text-end"><strong>Uploaded</strong></div>
+        </div>
 
-            <!-- Chapter Views -->
-            <span class="text-nowrap mx-3">{{ chapter.pk }}</span>
-
-            <!-- Upload Time -->
-            <span class="text-muted text-nowrap" title="{{ chapter.upload_time }}">
-                {{ chapter.created_at }}
-            </span>
-        </li>
-        {% endfor %}
-    </ul>
+        <!-- Chapters -->
+        <ul class="row text-light py-2" style="background-color: #1c2331;">
+            {% for chapter in chapters %}
+            <div class="col-md-6"><strong>
+                <a href="{% url 'mangavault:read_chapter' chapter.id %}" class="text-decoration-none flex-grow-1"  style="color: white;" title="{{ chapter.title }}">
+                    {{ chapter.chapter_title }}
+                </a>
+            </strong></div>
+            <div class="col-md-3 text-center"><strong>{{ chapter.views|default:"0" }}</strong></div>
+            <div class="col-md-3 text-end">{{ chapter.created_at }}</strong></div>
+            {% empty %}
+            <div class="col-md-3 text-end">No chapters available.</strong></div>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 
 <script>
-    document.getElementById('show-more-btn').addEventListener('click', function() {
+    document.getElementById('show-more-btn').addEventListener('click', function () {
         var description = document.querySelector('.mt-4 p');
-        if (description.style.whiteSpace === 'normal') {
-            description.style.whiteSpace = 'nowrap';
-            this.textContent = 'SHOW MORE';
-        } else {
-            description.style.whiteSpace = 'normal';
+        if (description.classList.contains('text-truncate')) {
+            description.classList.remove('text-truncate');
             this.textContent = 'SHOW LESS';
+        } else {
+            description.classList.add('text-truncate');
+            this.textContent = 'SHOW MORE';
         }
     });
 </script>

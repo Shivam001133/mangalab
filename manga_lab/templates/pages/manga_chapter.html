@@ -3,13 +3,13 @@
 <link rel="stylesheet" href="{% static 'path/to/ionicons.min.css' %}">
 {% block meta_extend %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
-<title>{% block title %} MangaLab {% endblock title %} </title>
+<title>{% block title %} MangaLab {% endblock title %}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="This is scraping project for manga lab" />
 <meta name="author" content="Shivam Pandey" />
 <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
 {% endblock %}
-chapter_detail
+
 {% block content %}
 <div class="container text-center my-4">
     <h1>{{ manga_title }}</h1>
@@ -20,17 +20,23 @@ chapter_detail
         <a href="{% url 'home' %}" class="btn btn-primary">
             <i class="ion-home"></i> Home
         </a>
+        <!-- Dropdown -->
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn" style="background-color: #6351ce; color: white;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                 Select Chapter
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background-color: #1c2331;">
                 {% for chapter_ in chapters %}
-                <a class="dropdown-item" href="{% url 'mangavault:read_chapter' chapter_.id %}">{{ chapter_.title }}</a>
+                <li>
+                    <a class="dropdown-item" href="{% url 'mangavault:read_chapter' chapter_.id %}" style="color: white;">
+                        {{ chapter_.title }}
+                    </a>
+                </li>
+                {% empty %}
+                <li><span class="dropdown-item-text" style="color: white;">No chapters available</span></li>
                 {% endfor %}
-            </div>
+            </ul>
         </div>
-
         {% if next_chapter %}
             <a href="{% url 'mangavault:read_chapter' next_chapter.id %}" class="btn btn-success">
                 Next Chapter <i class="ion-arrow-right-c"></i>

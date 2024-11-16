@@ -5,6 +5,7 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+import random
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
@@ -102,3 +103,31 @@ class HarvestDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info("Spider opened: %s", spider.name)
+
+
+class ProxyMiddleware:
+    def __init__(self):
+        self.proxies = [
+            "http://proxy1.com:8000",
+            "http://proxy2.com:8000",
+            # Add more proxies here
+        ]
+
+    def process_request(self, request, spider):
+        proxy = random.SystemRandom().choice(self.proxies)
+        request.meta["proxy"] = proxy
+
+
+class UserAgentMiddleware:
+    def __init__(self):
+        self.user_agents = [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" /
+            " (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) " /
+            "Gecko/20100101 Firefox/54.0",
+            # Add more user agents here
+        ]
+
+    def process_request(self, request, spider):
+        user_agent = random.SystemRandom().choice(self.user_agents)
+        request.headers["User-Agent"] = user_agent

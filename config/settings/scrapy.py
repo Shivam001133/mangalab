@@ -49,7 +49,7 @@ USER_AGENT = generate_user_agent(
 )
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
@@ -82,8 +82,12 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
+# DOWNLOADER_MIDDLEWARES = {
+#     "harvest.middlewares.HarvestDownloaderMiddleware": 543,
+# }
 DOWNLOADER_MIDDLEWARES = {
-    "harvest.middlewares.HarvestDownloaderMiddleware": 543,
+    "harvest.middlewares.ProxyMiddleware": 5430,
+    "scrapy_user_agents.middlewares.RandomUserAgentMiddleware": 4000,
 }
 
 # Enable or disable extensions
@@ -95,7 +99,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "harvest.pipelines.MangaVaultPipeline": 300,
+    # "harvest.pipelines.MangaVaultPipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

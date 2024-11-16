@@ -1,4 +1,4 @@
-import json
+import ast
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 
@@ -35,6 +35,6 @@ def manga_read_chapter(request, pk):
         "manga_title": manga.title,
         "chapters": chapters,
         "next_chapter": next_chapter,
-        "chapter_url": json.loads(chapter.chapter_list),
+        "chapter_url": ast.literal_eval(chapter.chapter_list),
     }
     return render(request, "pages/manga_chapter.html", context)

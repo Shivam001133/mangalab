@@ -27,12 +27,14 @@
     
     <div class="carousel-inner">
       {% for data in banner %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <img class="d-block w-100 img-fluid" src="{{ data.image_url }}" alt="Slide {{ forloop.counter }}">
-        </div>
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <img class="d-block w-100 img-fluid" 
+                   src="{% if data.image_url %}{{ data.image_url }}{% else %}{% static 'images/default-image.jpg' %}{% endif %}" 
+                   alt="Slide {{ forloop.counter }}">
+          </div>
       {% endfor %}
-    </div>
-    
+  </div>
+  
     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
@@ -44,38 +46,44 @@
 </div>
 
 <div class="container">
-  <h3 class="h3">Manga List </h3>
-  <hr class="hr">
-  <div class="row">
+  <h3 class="h3 ms-4 mb-3" style="padding: 0 15px;">Manga List</h3>
+  <hr class="hr mb-4" style="margin: 0 15px;">
+  <div class="row gx-4 gy-4"> <!-- Added gutters for spacing -->
     {% for item in data %}
     <div class="col-md-3 mb-4">
       <div class="item-thumb hover-details c-image-hover">
         <a href="{% url 'mangavault:manga_detail' item.id %}" title="{{ item.title }}">
-          <img width="175" height="238" class="img-responsive" src="{{ item.cover_img }}" title="{{ item.description }}" alt="{{ item.slanged_title }}">
+          <img 
+            class="img-responsive w-100 rounded" 
+            style="max-width: 175px; height: auto; display: block; margin: 0 auto;" 
+            src="{{ item.cover_img }}" 
+            title="{{ item.description }}" 
+            alt="{{ item.slanged_title }}">
         </a>
       </div>
-      <div class="item-summary">
-        <div class="post-title font-title">
-          <h3 class="h2 pt-2">
-            <a href="{% url 'mangavault:manga_detail' item.id %}">{{ item.title }}</a>
-          </h3>
+      <div class="item-summary mt-2"> <!-- Added top margin -->
+        <div class="post-title font-title text-center"> <!-- Centered title -->
+          <p class="mb-2">
+            <a class="link-underline-dark text-light" href="{% url 'mangavault:manga_detail' item.id %}">{{ item.title }}</a>
+          </p>
         </div>
-        <div class="list-chapter">
+        <div class="list-chapter text-center"> <!-- Centered chapters -->
           <div class="chapter-item">
-            <span class="chapter font-meta">
+            <span class="chapter font-meta d-block mb-1">
               <a href="{{ item.chapter_url }}" class="btn-link">{{ item.chapter_title }}</a>
             </span>
-            <span class="post-on font-meta">{{ item.time_desc }}</span>
+            <span class="post-on font-meta text-muted">{{ item.time_desc }}</span>
           </div>
         </div>
       </div>
     </div>
     {% if forloop.counter|divisibleby:4 %}
   </div>
-  <div class="row">
+  <div class="row gx-4 gy-4"> <!-- Start a new row -->
     {% endif %}
     {% endfor %}
   </div>
 </div>
+
 
 {% endblock content %}
