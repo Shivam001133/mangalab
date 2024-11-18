@@ -4,7 +4,7 @@ volumes:
   mangalab_local_redis: {}
 
 networks:
-  elastic:
+  mangalabs_s:
     driver: bridge
 
 services:
@@ -14,9 +14,12 @@ services:
       dockerfile: ./compose/local/django/Dockerfile
     image: manga_lab_local_django
     container_name: mangalab_local_django
+    environment:
+      - ELASTICSEARCH_HOST=elasticsearch
     depends_on:
       - postgres
       - redis
+      - elasticsearch
     volumes:
       - .:/app:z
     env_file:
@@ -26,7 +29,7 @@ services:
       - '8000:8000'
     command: /start
     networks:
-      - elastic
+      - mangalabs_s
 
   postgres:
     build:
@@ -40,7 +43,7 @@ services:
     env_file:
       - ./.envs/.local/.postgres
     networks:
-      - elastic
+      - mangalabs_s
 
   redis:
     image: docker.io/redis:6
@@ -49,7 +52,7 @@ services:
     volumes:
       - mangalab_local_redis:/data
     networks:
-      - elastic
+      - mangalabs_s
 
   celeryworker:
     <<: *django
@@ -61,7 +64,7 @@ services:
     ports: []
     command: /start-celeryworker
     networks:
-      - elastic
+      - mangalabs_s
 
   celerybeat:
     <<: *django
@@ -73,7 +76,7 @@ services:
     ports: []
     command: /start-celerybeat
     networks:
-      - elastic
+      - mangalabs_s
 
   flower:
     <<: *django
@@ -83,21 +86,20 @@ services:
       - '5555:5555'
     command: /start-flower
     networks:
-      - elastic
-
-  scrapy:
-    <<: *django
-    container_name: mangalab_local_scrapy
-    volumes:
-      - .:/app
+      - mangalabs_s
+  
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
+    container_name: mangalab_local_elasticsearch
     environment:
-      - PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+      - cluster.name=es
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
     ports:
-      - '1515:8000'
+      - '9520:9520'
+      - '9530:9530'
+    volumes:
+      - ./esdata-8:/var/lib/elasticsearch/data
     networks:
-      - elastic
+      - mangalabs_s

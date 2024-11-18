@@ -41,8 +41,9 @@
       <!-- Left links -->
 
       <!-- Search form -->
-      <form class="d-flex input-group w-auto me-4">
-        <input type="search" class="form-control" placeholder="Manga or Anime" aria-label="Search" />
+      <form class="d-flex input-group w-auto me-4" method="get" action="{% url 'haystack_search' %}" class="d-flex input-group w-auto me-4">
+        {{ form.as_p }}
+        <input type="search" name="q" class="form-control" placeholder="Manga or Anime" aria-label="Search" />
         <button class="btn" type="button" data-mdb-ripple-color="dark" style="background-color: #6351ce; color: white; padding: .45rem 1.5rem .35rem;">
           Search
         </button>

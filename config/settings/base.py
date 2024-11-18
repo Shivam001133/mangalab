@@ -82,6 +82,7 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
+    "haystack",
 ]
 
 LOCAL_APPS = [
@@ -345,5 +346,12 @@ SPECTACULAR_SETTINGS = {
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
     "SCHEMA_PATH_PREFIX": "/api/",
 }
-# Your stuff...
+# Elasticsearch
 # ------------------------------------------------------------------------------
+HAYSTACK_CONNECTIONS = {
+    "default": {
+        "ENGINE": "haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine",
+        "URL": "http://127.0.0.1:9320/",
+        "INDEX_NAME": "haystack",
+    },
+}

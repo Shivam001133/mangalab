@@ -34,3 +34,6 @@ playwright==1.47.0
 user-agent==0.1.10
 # Scrapy-User-Agent
 scrapy-user-agents==0.1.1
+# elastic search
+django-haystack==3.3.0
+elasticsearch>=2.0.0,<3.0.0

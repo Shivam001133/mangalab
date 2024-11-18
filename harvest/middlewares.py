@@ -121,10 +121,10 @@ class ProxyMiddleware:
 class UserAgentMiddleware:
     def __init__(self):
         self.user_agents = [
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" /
-            " (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) " /
-            "Gecko/20100101 Firefox/54.0",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            / " (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) "
+            / "Gecko/20100101 Firefox/54.0",
             # Add more user agents here
         ]
 
