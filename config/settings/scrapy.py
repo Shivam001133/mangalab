@@ -25,7 +25,7 @@ PLAYWRIGHT_LAUNCH_OPTIONS = {
     # Bypass bot detection
     "args": ["--disable-blink-features=AutomationControlled"],
 }
-PLAYWRIGHT_CDP_URL = "http://localhost:9222"
+# PLAYWRIGHT_CDP_URL = "http://localhost:9222"
 
 # Scrapy settings for harvest project
 #
