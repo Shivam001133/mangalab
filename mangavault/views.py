@@ -8,21 +8,55 @@ from utils.models import BannerImage
 
 
 def home_view(request):
-    banner = BannerImage.objects.filter(
-        Q(image__isnull=False) & ~Q(image="") | Q(image_url__exact="")
-    )
-    banner = BannerImage.objects.all()
-    data = MangaVault.objects.filter(is_active=True)
-    context = {"banner": banner, "data": data}
-    return render(request, "pages/home.html", context)
+    weekly_spotlight = [
+        ("AFK", "images/afk.jpg", "Action"),
+        ("The Mad Gate", "images/mad_gate.jpg", "Fantasy"),
+        ("Chaos Girl", "images/chaos_girl.jpg", "Sci-Fi"),
+        ("Carrier of the Mask", "images/carrier.jpg", "Drama"),
+        ("Sunshine Cafe", "images/sunshine.jpg", "Slice of Life"),
+        ("Dishonor", "images/dishonor.jpg", "Thriller"),
+    ]
+
+    trending = [
+        ("The Delinquent Heiress", "images/heiress.jpg"),
+        ("Spirit Tracer", "images/spirit_tracer.jpg"),
+        ("Mastery", "images/mastery.jpg"),
+        ("Tales of the Dragon Consort", "images/dragon_consort.jpg"),
+        ("Magmeli of the Azure Sea", "images/magmeli.jpg"),
+    ]
+
+    return render(request, "pages/home.html", {
+        "weekly_spotlight": weekly_spotlight,
+        "trending": trending,
+    })
 
 
-def manga_detail(request, pk):
-    manga = get_object_or_404(MangaVault, pk=pk)
-    chapters = MangaChapter.objects.filter(manga=manga)
-    return render(
-        request, "pages/manga_detail.html", {"manga": manga, "chapters": chapters}
-    )
+def manga_detail(request):
+    context = {
+        'title': "The Zombie Won’t Bite Me",
+        'rating': 2.9,
+        'vote_count': 68,
+        'author': "Updating",
+        'status': "Ongoing",
+        'views': "18,582",
+        'genres': "Action, Drama, Manhwa, Adventure",
+        'cover_image': "images/zombie-cover.jpg",
+        'summary': """
+            The Zombie Won’t Bite Me is a manga/manhwa series... (summary content goes here)
+        """,
+        'chapters': [
+            {'name': 'Chapter 15', 'views': '726 views', 'time': '17 hours ago'},
+            {'name': 'Chapter 14', 'views': '567 views', 'time': '17 hours ago'},
+            {'name': 'Chapter 13', 'views': '600 views', 'time': '17 hours ago'},
+            {'name': 'Chapter 12', 'views': '922 views', 'time': '1 day ago'},
+            {'name': 'Chapter 11', 'views': '823 views', 'time': '1 day ago'},
+        ],
+        'comments': [
+            {'user': 'Aj3theone', 'time': '3 hours ago', 'text': 'Chapter 5 repeater in peak even when the earth is in apocalypse'},
+            {'user': 'Reader01', 'time': '13 hours ago', 'text': 'Thanks ❤️'},
+        ]
+    }
+    return render(request, 'pages/detail.html', context)
 
 
 def manga_read_chapter(request, pk):

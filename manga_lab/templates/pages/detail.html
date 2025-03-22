@@ -3,24 +3,14 @@
 {% block title %}{{ title }} | VoyceMe{% endblock %}
 
 {% block content %}
-<!-- Hero Section with Background Fade -->
-<section class="relative overflow-hidden text-highlight">
-  <!-- Background Image + Fading Gradient -->
-  <div class="absolute inset-0 z-0">
-    <!-- Top sharp image -->
-    <div class="h-96 bg-top bg-cover bg-no-repeat" 
-         style="background-image: url('https://4kwallpapers.com/images/walls/thumbs_3t/21418.jpg');">
-    </div>
-    <!-- Fading from image to background -->
-    <div class="h-48 bg-gradient-to-b from-transparent to-main"></div>
-  </div>
+<section class="bg-main text-highlight py-12 px-4">
+  <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-start">
 
-  <!-- Main Content Over Background -->
-  <div class="relative z-10 max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 px-4 py-16 items-start">
-    
-    <!-- Left: Title & Meta -->
+    <!-- Left: Title + Metadata -->
     <div>
       <h1 class="text-3xl md:text-4xl font-bold mb-4">{{ title }}</h1>
+
+      <!-- Meta Box -->
       <div class="bg-secondary p-4 rounded-xl shadow-md">
         <p class="text-lg font-semibold mb-2">
           <span class="text-yellow-400">★</span> {{ rating }} / 5.0 from {{ vote_count }} votes
@@ -32,7 +22,7 @@
           <li><strong>Genre:</strong> {{ genres }}</li>
         </ul>
 
-        <!-- Buttons -->
+        <!-- Action Buttons -->
         <div class="mt-6 flex flex-wrap gap-4">
           <a href="#" class="bg-highlight hover:bg-accent text-main font-semibold px-5 py-2 rounded-full shadow">
             Read First
@@ -55,7 +45,7 @@
   </div>
 </section>
 
-<!-- Summary Section -->
+<!-- Summary -->
 <section class="bg-main text-highlight py-12 px-4">
   <div class="max-w-4xl mx-auto">
     <h2 class="text-2xl font-bold mb-4">Summary</h2>
@@ -88,12 +78,12 @@
   </div>
 </section>
 
-<!-- Comments Section -->
+<!-- Comments -->
 <section class="bg-main text-highlight py-12 px-4">
   <div class="max-w-4xl mx-auto">
     <h2 class="text-2xl font-bold mb-4">Comments ({{ comments|length }})</h2>
 
-    <!-- Comment Form -->
+    <!-- Comment form -->
     <form class="mb-6">
       <textarea class="w-full h-24 rounded p-3 bg-secondary text-highlight placeholder:text-accent" placeholder="Leave a comment..."></textarea>
       <div class="flex justify-between mt-2">
@@ -104,7 +94,7 @@
       </div>
     </form>
 
-    <!-- Comment List -->
+    <!-- Existing comments -->
     <ul class="space-y-4">
       {% for comment in comments %}
       <li class="bg-secondary p-4 rounded shadow text-sm">

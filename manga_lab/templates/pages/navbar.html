@@ -1,83 +1,39 @@
-{% load static i18n %}
-{% get_current_language as LANGUAGE_CODE %}
+{% load static %}
 
-<style>
-  @media (max-width: 768px) {
-  .dropdown-menu-end {
-    right: auto !important;
-    left: 0 !important;
-  }
-}
-</style>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg fixed-to" style="background-color: #1c2331" data-bs-theme="dark">
-  <!-- Container wrapper -->
-  <div class="container-fluid">
-    <!-- Navbar brand -->
-    <a class="navbar-brand" href="{% url 'home' %}">
-      <img src="{% static 'images/logo/MangaLab.svg' %}" alt="MangaLab" width="200" height="44">
+<header class="navbar bg-secondary shadow-md fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-7xl w-full mx-auto flex items-center justify-between px-4 py-2">
+
+    <!-- Logo -->
+    <a href="#" class="text-2xl font-bold text-highlight">
+      <!-- <img src="{% static 'images/logo.png' %}" alt="Logo" class="h-8 inline-block mr-2"> -->
+      VoyceMe
     </a>
 
-    <!-- Toggle button -->
-    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <i class="fas fa-bars"></i>
-    </button>
+    <!-- Navigation Links -->
+    <nav class="hidden md:flex space-x-6 text-base font-medium">
+      <a href="#" class="text-accent hover:text-highlight transition">Originals</a>
+      <a href="#" class="text-accent hover:text-highlight transition">Trending</a>
+      <a href="#" class="text-accent hover:text-highlight transition">Discover</a>
+      <a href="#" class="text-accent hover:text-highlight transition">Contest</a>
+    </nav>
 
-    <!-- Collapsible wrapper -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <!-- Left links -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' %}">Manga</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Anime</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'about' %}">About</a>
-        </li>
-      </ul>
-      <!-- Left links -->
-
-      <!-- Search form -->
-      <form class="d-flex input-group w-auto me-4">
-        <input type="search" class="form-control" placeholder="Manga or Anime" aria-label="Search" />
-        <button class="btn btn-outline-primary" type="button" data-mdb-ripple-color="dark" style="padding: .45rem 1.5rem .35rem;">
-          Search
-        </button>
-      </form>
-      {% if request.user.is_authenticated %}
-      <ul class="navbar-nav mb-2 mb-lg-0" style="width:80px;">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(2).jpg" class="rounded-circle img-fluid" height="35" width="35">
-          </a>
-          <!-- Add custom inline style to force the dropdown to align left -->
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown" style="left: auto; right: 0;">
-            <li>
-              <a class="dropdown-item" href="{% url 'users:detail' request.user.pk %}">{% translate "My Profile" %}</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      {% else %}
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        {% if ACCOUNT_ALLOW_REGISTRATION %}
-          <li class="nav-item">
-            <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
-          </li>
-        {% endif %}
-        <li class="nav-item">
-          <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
-        </li>
-      </ul>
-      {% endif %}
+    <!-- Right Side Buttons -->
+    <div class="flex items-center space-x-4">
+      <button class="btn bg-highlight hover:bg-accent text-main px-4 py-2 rounded-full font-semibold shadow">
+        Publish
+      </button>
+      <a href="#" class="btn btn-ghost text-accent hover:text-highlight">Login</a>
     </div>
-    <!-- Collapsible wrapper -->
+
+    <!-- Mobile Menu Button -->
+    <div class="md:hidden">
+      <button class="btn btn-ghost btn-circle text-accent hover:text-highlight">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
   </div>
-  <!-- Container wrapper -->
-</nav>
+</header>
