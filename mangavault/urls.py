@@ -5,6 +5,6 @@ from . import views
 app_name = "mangavault"
 
 urlpatterns = [
-    path("detail/", views.manga_detail, name="manga_detail"),
+    path("detail/<int:pk>/", views.manga_detail, name="manga_detail"),
     path("chapter/<int:pk>/", views.manga_read_chapter, name="read_chapter"),
 ]

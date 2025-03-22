@@ -72,6 +72,7 @@ def _save_or_log_manga(manga, genre) -> None:
 
 def save_chapter_to_db(chapter_data) -> None:
     """Save chapter data to MangaChapter model, handling both lists and dictionaries."""
+    print("testteosdjflkaskflaskdfkljadsklfjlkds "*100)
     with transaction.atomic():
         if isinstance(chapter_data, list):
             for chapter in chapter_data:
@@ -82,6 +83,7 @@ def save_chapter_to_db(chapter_data) -> None:
 
 def _save_or_log_chapter(chapter) -> None:
     """Helper to save or log existing MangaChapter entry."""
+    print("chapter_Dave_test_log_finder "*100)
     try:
         obj, created = MangaChapter.objects.get_or_create(**chapter)
         if created:

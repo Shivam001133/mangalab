@@ -1,57 +1,164 @@
 {% extends "base.html" %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'path/to/ionicons.min.css' %}">
-{% block meta_extend %}
-<meta http-equiv="x-ua-compatible" content="ie=edge" />
-<title>{% block title %} MangaLab {% endblock title %} </title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="This is scraping project for manga lab" />
-<meta name="author" content="Shivam Pandey" />
-<link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
-{% endblock %}
-chapter_detail
+{% block title %}{{ manga_title }} | VoyceMe{% endblock %}
+
 {% block content %}
-<div class="container text-center my-4">
-    <h1>{{ manga_title }}</h1>
+
+
+<section class="max-w-6xl mx-auto px-4 py-6">
+    <!-- Chapter Title -->
+    <h1 class="text-2xl md:text-3xl font-bold text-highlight text-center mb-6">{{ chapter.chapter_title }}</h1>
+  <!-- Navigation -->
+  <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
+    <a href="{% url 'home' %}" class="bg-accent text-main font-medium px-4 py-2 rounded shadow hover:bg-highlight transition">
+      🏠 Home
+    </a>
+    
+    <!-- Dropdown for Chapter Selection -->
+    <div class="relative inline-block text-left">
+        <button
+        type="button"
+        onclick="toggleDropdown()"
+        class="inline-flex justify-center w-full rounded-md bg-secondary px-4 py-2 text-sm font-medium text-highlight shadow hover:bg-accent transition"
+        id="menu-button"
+        aria-expanded="false"
+        aria-haspopup="true"
+        >
+        Select Chapter
+        <svg class="-mr-1 ml-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+        </svg>
+    </button>
+    
+    <!-- Dropdown menu -->
+    <div
+    id="dropdown-menu"
+    class="hidden absolute z-10 mt-2 w-48 rounded-md bg-secondary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none max-h-60 overflow-y-auto"
+    role="menu"
+    aria-orientation="vertical"
+    aria-labelledby="menu-button"
+    tabindex="-1"
+    >
+    {% for chapter_ in chapters %}
+    <a href="{% url 'mangavault:read_chapter' chapter_.id %}" class="block px-4 py-2 text-sm text-highlight hover:bg-accent transition" role="menuitem">
+        {{ chapter_.chapter_title }}
+    </a>
+    {% endfor %}
+</div>
+</div>  
+
+<!-- Next Chapter -->
+{% if next_chapter %}
+<a href="{% url 'mangavault:read_chapter' next_chapter.id %}" class="bg-highlight text-main font-medium px-4 py-2 rounded shadow hover:bg-accent transition">
+    Next Chapter →
+</a>
+{% else %}
+<button class="bg-gray-500 text-white font-medium px-4 py-2 rounded shadow cursor-not-allowed">
+    Next Chapter →
+</button>
+{% endif %}
 </div>
 
-<div class="container my-4">
-    <div class="d-flex justify-content-between align-items-center">
-        <a href="{% url 'home' %}" class="btn btn-primary">
-            <i class="ion-home"></i> Home
-        </a>
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Select Chapter
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                {% for chapter_ in chapters %}
-                <a class="dropdown-item" href="{% url 'mangavault:read_chapter' chapter_.id %}">{{ chapter_.title }}</a>
-                {% endfor %}
-            </div>
-        </div>
-
-        {% if next_chapter %}
-            <a href="{% url 'mangavault:read_chapter' next_chapter.id %}" class="btn btn-success">
-                Next Chapter <i class="ion-arrow-right-c"></i>
-            </a>
-        {% else %}
-            <button class="btn btn-success" disabled>
-                Next Chapter <i class="ion-arrow-right-c"></i>
-            </button>
-        {% endif %}
+<!-- Manga Images Lazy Load -->
+<div class="space-y-6" id="chapter-images">
+    {% for img in chapter_url %}
+    <div class="flex justify-center">
+      <img
+        data-src="{{ img }}"
+        alt="Page {{ forloop.counter }}"
+        class="lazy-img rounded-lg shadow-lg max-w-full h-auto"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      />
     </div>
-</div>
+    {% endfor %}
+  </div>
+  
+  <!-- Bottom Navigation -->
+  <div class="flex justify-between items-center mt-10">
+    {% if previous_chapter %}
+    <a href="{% url 'mangavault:read_chapter' previous_chapter.id %}" class="bg-accent text-main font-medium px-4 py-2 rounded shadow hover:bg-highlight transition">
+      ← Previous Chapter
+    </a>
+    {% else %}
+    <span class="text-accent italic">No previous chapter</span>
+    {% endif %}
 
-<div class="container my-4">
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-            {% for img in chapter_url %}
-            <img src="{{ img }}" class="img-fluid" alt="Manga Image">
-            {% endfor %}
-        </div>
-        <div class="col-md-2"></div>
-    </div>
-</div>
-{% endblock content %}
+    {% if next_chapter %}
+    <a href="{% url 'mangavault:read_chapter' next_chapter.id %}" class="bg-highlight text-main font-medium px-4 py-2 rounded shadow hover:bg-accent transition">
+      Next Chapter →
+    </a>
+    {% else %}
+    <span class="text-accent italic">No next chapter</span>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Comments -->
+<section class="bg-main text-highlight py-12 px-4">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-2xl font-bold mb-4">Comments ({{ comments|length }})</h2>
+
+    <!-- Comment form -->
+    <form class="mb-6">
+      <textarea class="w-full h-24 rounded p-3 bg-secondary text-highlight placeholder:text-accent" placeholder="Leave a comment..."></textarea>
+      <div class="flex justify-between mt-2">
+        <input type="text" placeholder="Name" class="bg-secondary text-highlight placeholder:text-accent px-3 py-2 rounded w-1/2">
+        <button type="submit" class="bg-highlight hover:bg-accent text-main px-5 py-2 rounded-full font-semibold shadow">
+          Comment
+        </button>
+      </div>
+    </form>
+
+    <!-- Comment list -->
+    <ul class="space-y-4">
+      {% for comment in comments %}
+      <li class="bg-secondary p-4 rounded shadow text-sm">
+        <p class="text-highlight font-semibold">{{ comment.user }} <span class="text-accent text-xs">{{ comment.time }}</span></p>
+        <p class="text-accent mt-1">{{ comment.text }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const lazyImages = document.querySelectorAll("img.lazy-img");
+  
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.classList.remove("lazy-img");
+            obs.unobserve(img);
+          }
+        });
+      }, {
+        rootMargin: "0px 0px 200px 0px",
+        threshold: 0.1
+      });
+  
+      lazyImages.forEach(img => observer.observe(img));
+    });
+  </script>
+  
+
+<!-- Dropdown Toggle Script -->
+<script>
+function toggleDropdown() {
+    const menu = document.getElementById("dropdown-menu");
+    menu.classList.toggle("hidden");
+}
+
+// Optional: Close dropdown if clicked outside
+document.addEventListener("click", function (e) {
+    const menu = document.getElementById("dropdown-menu");
+    const button = document.getElementById("menu-button");
+
+    if (!button.contains(e.target) && !menu.contains(e.target)) {
+    menu.classList.add("hidden");
+    }
+});
+</script>
+{% endblock %}

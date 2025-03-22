@@ -1,119 +1,117 @@
 {% extends "base.html" %}
 {% load static %}
-{% block meta_extend %}
-<meta http-equiv="x-ua-compatible" content="ie=edge" />
-<title>{% block title %} MangaLab {% endblock title %} </title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="This is scraping project for manga lab" />
-<meta name="author" content="Shivam Pandey" />
-<link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
-{% endblock %}
+{% block title %}{{ title }} | VoyceMe{% endblock %}
+
 {% block content %}
-<div class="container py-4">
-    <div class="row">
-        <!-- Left Panel -->
-        <div class="col-md-4 text-center">
-            <div class="mb-3">
-                <img 
-                    class="img-fluid img-thumbnail" 
-                    src="{{ manga.cover_img }}" 
-                    alt="{{ manga.title }}" 
-                    title="{{ manga.title }}" 
-                    onerror="this.src=''"
-                >
-            </div>
-            <button class="btn btn-primary w-100">READ CHAPTER LIST</button>
-        </div>
-
-        <!-- Right Panel -->
-        <div class="col-md-8">
-            <h1 class="mb-3">{{ manga.title }}</h1>
-
-            <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <th>Alternative</th>
-                        <td>{{ manga.manga_title }}</td>
-                    </tr>
-                    <tr>
-                        <th>Author(s)</th>
-                        <td>{{ authors|default:'Unknown' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Status</th>
-                        <td>{{ manga.status|default:'Unknown' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Genres</th>
-                        <td>
-                            {% for genre_ in manga.genre.all %}
-                                <a href="{{ genre.url }}" class="badge bg-secondary">{{ genre_.title }}</a>
-                            {% endfor %}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div>
-                <p><strong>Updated:</strong> {{ updated|default:'Unknown' }}</p>
-                <p><strong>Views:</strong> {{ views|default:'0' }}</p>
-                <p>
-                    <strong>Rating:</strong> 
-                    <span>({{ rating|default:'0' }}/5)</span>
-                </p>
+<section class="bg-main text-highlight py-12 px-4">
+    <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
+  
+      <!-- Left: Title + Metadata -->
+      <div class="flex flex-col justify-center">
+        <h1 class="text-3xl md:text-4xl font-bold mb-4">{{ manga.title }}</h1>
+  
+        <!-- Meta Box -->
+        <div class="bg-secondary p-6 rounded-xl shadow-md w-full max-w-md">
+          <p class="text-lg font-semibold mb-3">
+            <span class="text-yellow-400">★</span> {{ rating }} / 5.0 from {{ vote_count }} votes
+          </p>
+          <ul class="text-sm text-accent space-y-1 mb-4">
+            <li><strong>Author:</strong> {{ author }}</li>
+            <li><strong>Status:</strong> {{ status }}</li>
+            <li><strong>Views:</strong> {{ views }}</li>
+            <li><strong>Genre:</strong> {{ manga.genre }}</li>
+          </ul>
+  
+          <!-- Action Buttons -->
+            <div class="flex flex-wrap gap-3">
+                {% if chapter_first %}
+                <a href="{% url 'mangavault:read_chapter' chapter_first %}" class="bg-highlight hover:bg-accent text-main font-semibold px-5 py-2 rounded-full shadow">
+                    Read First
+                </a>
+                {% endif %}
+            
+                {% if chapter_last %}
+                <a href="{% url 'mangavault:read_chapter' chapter_last %}" class="bg-highlight hover:bg-accent text-main font-semibold px-5 py-2 rounded-full shadow">
+                    Read Last
+                </a>
+                {% endif %}
+            
+                <a href="#" class="bg-accent hover:bg-highlight text-main font-semibold px-5 py-2 rounded-full shadow">
+                Read Other
+                </a>
             </div>
         </div>
+      </div>
+  
+      <!-- Right: Cover Image -->
+      <div class="flex justify-center">
+        <img src="{{ manga.cover_img }}" alt="{{ manga.title }}"
+             class="w-[240px] h-[340px] object-cover rounded-lg shadow-lg border-2 border-highlight" />
+      </div>
     </div>
+  </section>
+  
 
-    <!-- Description -->
-    <div class="mt-4">
-        <h3>Description:</h3>
-        <p>{{ manga.description|truncatechars:200 }}</p>
-        <button class="btn btn-link" id="show-more-btn">SHOW MORE</button>
+<!-- Summary -->
+<section class="bg-main text-highlight py-12 px-4">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-2xl font-bold mb-4">Summary</h2>
+    <p class="text-accent leading-relaxed text-sm md:text-base">
+      {{ manga.description }}
+    </p>
+  </div>
+</section>
+
+<!-- Latest Chapters -->
+<section class="bg-main text-highlight py-12 px-4">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-bold">Latest Manga Release</h2>
+      <button class="text-accent text-sm border border-accent px-3 py-1 rounded hover:bg-secondary">
+        Show More
+      </button>
     </div>
-</div>
-
-<div class="container panel-story-chapter-list">
-    <!-- Header Section -->
-    <div class="row bg-primary text-white py-2">
-        <div class="col-md-6"><strong>Chapter Name</strong></div>
-        <div class="col-md-3 text-center"><strong>Views</strong></div>
-        <div class="col-md-3 text-end"><strong>Uploaded</strong></div>
-    </div>
-
-    <!-- Chapter List -->
-    <ul class="list-group">
+    <ul class="space-y-2">
         {% for chapter in chapters %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <!-- Chapter Name -->
-            <a href="{% url 'mangavault:read_chapter' chapter.id %}"
-               class="text-decoration-none flex-grow-1" 
-               title="{{ chapter.title }}">
-                {{ chapter.chapter_title }}
-            </a>
-
-            <!-- Chapter Views -->
-            <span class="text-nowrap mx-3">{{ chapter.pk }}</span>
-
-            <!-- Upload Time -->
-            <span class="text-muted text-nowrap" title="{{ chapter.upload_time }}">
-                {{ chapter.created_at }}
-            </span>
+        <li class="flex justify-between items-center bg-secondary p-3 rounded shadow text-sm">
+          <a href="{% url 'mangavault:read_chapter' chapter.pk %}" class="text-highlight hover:underline">
+            {{ chapter.chapter_title }}
+          </a>
+          <div class="text-xs text-accent text-right">
+            <p>{{ chapter.views }} views</p>
+            <p>{{ chapter.updated_at }}</p>
+          </div>
         </li>
         {% endfor %}
-    </ul>
-</div>
+      </ul>      
+  </div>
+</section>
 
-<script>
-    document.getElementById('show-more-btn').addEventListener('click', function() {
-        var description = document.querySelector('.mt-4 p');
-        if (description.style.whiteSpace === 'normal') {
-            description.style.whiteSpace = 'nowrap';
-            this.textContent = 'SHOW MORE';
-        } else {
-            description.style.whiteSpace = 'normal';
-            this.textContent = 'SHOW LESS';
-        }
-    });
-</script>
-{% endblock content %}
+<!-- Comments -->
+<section class="bg-main text-highlight py-12 px-4">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-2xl font-bold mb-4">Comments ({{ comments|length }})</h2>
+
+    <!-- Comment form -->
+    <form class="mb-6">
+      <textarea class="w-full h-24 rounded p-3 bg-secondary text-highlight placeholder:text-accent" placeholder="Leave a comment..."></textarea>
+      <div class="flex justify-between mt-2">
+        <input type="text" placeholder="Name" class="bg-secondary text-highlight placeholder:text-accent px-3 py-2 rounded w-1/2">
+        <button type="submit" class="bg-highlight hover:bg-accent text-main px-5 py-2 rounded-full font-semibold shadow">
+          Comment
+        </button>
+      </div>
+    </form>
+
+    <!-- Existing comments -->
+    <ul class="space-y-4">
+      {% for comment in comments %}
+      <li class="bg-secondary p-4 rounded shadow text-sm">
+        <p class="text-highlight font-semibold">{{ comment.user }} <span class="text-accent text-xs">{{ comment.time }}</span></p>
+        <p class="text-accent mt-1">{{ comment.text }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endblock %}
