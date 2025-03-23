@@ -129,11 +129,7 @@ class DomainSpider(scrapy.Spider):
                 status = (items.css(genre_scrape.get("status")).get() or "").strip().lower()
             elif "genre" in heading:
                 genre_list = [
-<<<<<<< HEAD
                     (genre.css(self.scraping_harvest.manga_genre).get() or "").strip().capitalize()
-=======
-                    (genre.css(self.scraping_harvest.manga_genre).getall() or "").strip().capitalize()
->>>>>>> 7fe7b48 (ui fix for manga)
                     for genre in items.css(genre_scrape.get("list"))
                 ]
         print("*"*100)
@@ -162,13 +158,10 @@ class DomainSpider(scrapy.Spider):
                     "chapter_data": chapter_data,
                     "playwright": True,
                     "playwright_include_page": True,
-<<<<<<< HEAD
-=======
                      "playwright_page_goto_kwargs": {
                         "wait_until": "domcontentloaded",
                         "timeout": 45000
                     },
->>>>>>> 7fe7b48 (ui fix for manga)
                     "errback": self.errback,
                 },
                 callback=self.parse_chapter_content,
@@ -183,20 +176,10 @@ class DomainSpider(scrapy.Spider):
             self.scraping_harvest.chapter_payload.get("content_list")
         )
         img_list = [
-<<<<<<< HEAD
-            img.css(self.scraping_harvest.chapter_content).get()
-            for img in chapter_content
-        ]
-        chapter_data["chapter_list"] = img_list
-        print("*"*100)
-=======
             (response.css(self.scraping_harvest.chapter_content).get()).strip()
             for img in chapter_content
         ]
         chapter_data["chapter_list"] = img_list
-        print("chapter_finder_100101010101012133435 *"*100)
->>>>>>> 7fe7b48 (ui fix for manga)
-        print(chapter_data)
         await sync_to_async(save_chapter_to_db)(chapter_data)
         logger.info(f"Chapter saved: {chapter_data['chapter_title']}")
         await page.close()
